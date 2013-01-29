@@ -22,7 +22,7 @@ namespace Cassette.Scripts
             if (!settings.IsDebuggingEnabled)
             {
                 yield return new ConcatenateAssets();
-                yield return new MinifyAssets(Minifier);
+               // yield return new MinifyAssets(Minifier);
             }
         }
     }
