@@ -33,7 +33,7 @@ namespace Cassette
         public virtual CassetteApplicationContainer<T> CreateContainer()
         {
             cassetteConfigurations = CreateCassetteConfigurations();
-            if (string.IsNullOrEmpty(configurationSection.PrecompiledManifest))
+            if (true || string.IsNullOrEmpty(configurationSection.PrecompiledManifest))
             {
                 return CreateContainerFromConfiguration();
             }
@@ -46,7 +46,7 @@ namespace Cassette
         CassetteApplicationContainer<T> CreateContainerFromConfiguration()
         {
             var container = new CassetteApplicationContainer<T>(CreateApplication);
-            if (ShouldWatchFileSystem)
+            if (true || ShouldWatchFileSystem)
             {
                 container.CreateNewApplicationWhenFileSystemChanges(PhysicalApplicationDirectory);
             }
