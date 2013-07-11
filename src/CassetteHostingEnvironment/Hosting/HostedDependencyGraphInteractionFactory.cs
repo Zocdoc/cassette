@@ -7,15 +7,20 @@ namespace CassetteHostingEnvironment.Hosting
 {
     public class HostedDependencyGraphInteractionFactory : IDependencyGraphInteractionFactory
     {
-        readonly ICassetteApplication application;
+        ICassetteApplication _application;
         public HostedDependencyGraphInteractionFactory(ICassetteApplication application = null)
         {
-            this.application = application;
+            _application = application;
         }
 
         public IInteractWithDependencyGraph GetDependencyGraphInteration(CassetteSettings settings)
         {
-            return new InMemoryDependencyGraphInteraction(application);
+            return new InMemoryDependencyGraphInteraction(_application);
+        }
+
+        public void SetCassetteApplication(ICassetteApplication app)
+        {
+            _application = app;
         }
     }
 }

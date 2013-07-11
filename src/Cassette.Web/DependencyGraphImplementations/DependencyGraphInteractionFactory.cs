@@ -7,10 +7,10 @@ namespace Cassette.DependencyGraphInteration
 {
     public class DependencyGraphInteractionFactory : IDependencyGraphInteractionFactory
     {
-        readonly ICassetteApplication application;
+        ICassetteApplication _application;
         public DependencyGraphInteractionFactory(ICassetteApplication application = null)
         {
-            this.application = application;
+            this._application = application;
         }
 
         public IInteractWithDependencyGraph GetDependencyGraphInteration(CassetteSettings settings)
@@ -22,7 +22,12 @@ namespace Cassette.DependencyGraphInteration
                                                                 new InterationServiceUtility());
             }
 
-            return new InMemoryDependencyGraphInteraction(application);
+            return new InMemoryDependencyGraphInteraction(_application);
+        }
+
+        public void SetCassetteApplication(ICassetteApplication app)
+        {
+            _application = app;
         }
     }
 }

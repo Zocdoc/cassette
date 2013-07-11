@@ -121,8 +121,13 @@ namespace Cassette
                     application.Value.Dispose();
                 }
                 // Re-create the lazy object. So the application isn't created until it's asked for.
-                application = new Lazy<T>(CreateApplication);
-                application.Value.SetDependencyInteractionFactory(factory);
+                application = new Lazy<T>(() =>
+                {
+                    var app = CreateApplication();
+                    factory.SetCassetteApplication(app);
+                    app.SetDependencyInteractionFactory(factory);
+                    return app;
+                });
             }
         }
 
