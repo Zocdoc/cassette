@@ -47,6 +47,11 @@ namespace Cassette
             return _factory.GetDependencyGraphInteration(_settings);
         }
 
+        public IDependencyGraphInteractionFactory GetInteractionFactory()
+        {
+            return _factory;
+        }
+
         protected abstract IReferenceBuilder GetOrCreateReferenceBuilder(Func<IReferenceBuilder> create);
         protected abstract IPlaceholderTracker GetPlaceholderTracker();
 

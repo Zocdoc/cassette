@@ -111,6 +111,7 @@ namespace Cassette
             {
                 if (IsPendingCreation) return;
 
+                var factory = application.Value.GetInteractionFactory();
                 if (creationFailed)
                 {
                     creationFailed = false;
@@ -121,6 +122,7 @@ namespace Cassette
                 }
                 // Re-create the lazy object. So the application isn't created until it's asked for.
                 application = new Lazy<T>(CreateApplication);
+                application.Value.SetDependencyInteractionFactory(factory);
             }
         }
 

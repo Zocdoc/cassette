@@ -13,5 +13,6 @@ namespace Cassette
         IReferenceBuilder GetReferenceBuilder();
         IInteractWithDependencyGraph GetInteration();
         void SetDependencyInteractionFactory(IDependencyGraphInteractionFactory factory);
+        IDependencyGraphInteractionFactory GetInteractionFactory();
     }
 }
