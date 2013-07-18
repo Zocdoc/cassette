@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Web;
 
 namespace Cassette.Web
@@ -7,6 +8,7 @@ namespace Cassette.Web
     {
         static readonly object Lock = new object();
         static int _initializedModuleCount;
+        static double _startUpTimeInSeconds = -1;
 
         public void Init(HttpApplication httpApplication)
         {
@@ -21,8 +23,22 @@ namespace Cassette.Web
                 // make sure we only call the startup methods once per app domain
                 if (_initializedModuleCount++ != 0) return;
 
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
                 StartUp.ApplicationStart();
+                _startUpTimeInSeconds = stopWatch.ElapsedMilliseconds / 1000.0;
+                
             }
+        }
+
+        public static double GetInitTimeInSeconds()
+        {
+            if (_startUpTimeInSeconds < 0)
+            {
+                throw new Exception("Init hasnt happened yet, so you can't get the time it took.");
+            }
+
+            return _startUpTimeInSeconds;
         }
 
         void HttpApplicationPostMapRequestHandler(object sender, EventArgs e)
