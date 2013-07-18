@@ -15,7 +15,7 @@ namespace Cassette
         public CassetteApplicationContainer_Tests()
         {
             rootPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            Directory.CreateDirectory(rootPath);
+            Directory.CreateDirectory(rootPath, null);
             applicationInstances = new[] {CreateApplication(), CreateApplication()};
         }
 
@@ -33,7 +33,7 @@ namespace Cassette
         {
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.WriteAllText(Path.Combine(rootPath, "test.txt"), "");
                 PauseForFileSystemEvent();
@@ -47,7 +47,7 @@ namespace Cassette
         {
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.WriteAllText(Path.Combine(rootPath, "test.txt"), "");
                 PauseForFileSystemEvent();
@@ -62,7 +62,7 @@ namespace Cassette
             File.WriteAllText(filename, "");
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.Delete(filename);
                 PauseForFileSystemEvent();
@@ -78,7 +78,7 @@ namespace Cassette
             File.WriteAllText(filename, "");
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.WriteAllText(filename, "changed");
                 PauseForFileSystemEvent();
@@ -94,7 +94,7 @@ namespace Cassette
             File.WriteAllText(filename, "");
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.Move(filename, filename + ".new");
                 PauseForFileSystemEvent();
@@ -109,7 +109,7 @@ namespace Cassette
             var filename = Path.Combine(rootPath, "test.txt");
             using (var container = new CassetteApplicationContainer<ICassetteApplication>(StubApplicationFactory))
             {
-                container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+                container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
                 var first = container.Application;
                 File.WriteAllText(filename, "");
                 PauseForFileSystemEvent();
@@ -147,7 +147,7 @@ namespace Cassette
             create = failingCreate;
 
             var container = new CassetteApplicationContainer<ICassetteApplication>(() => create());
-            container.CreateNewApplicationWhenFileSystemChanges(rootPath);
+            container.CreateNewApplicationWhenFileSystemChanges(rootPath, null);
             var actualException = Assert.Throws<Exception>(delegate
             {
                 var app1 = container.Application;

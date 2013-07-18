@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Cassette.DependencyGraphInteration;
+
 #if NET35
 using Cassette.Utilities;
 #endif
@@ -65,7 +67,7 @@ namespace Cassette
             }
         }
 
-        public void CreateNewApplicationWhenFileSystemChanges(string rootDirectoryToWatch)
+        public void CreateNewApplicationWhenFileSystemChanges(string rootDirectoryToWatch, IDependencyGraphInteractionFactory factory)
         {
             // In production mode we don't expect the asset files to change
             // while the application is running. Changes to assets will involve a 
@@ -79,17 +81,18 @@ namespace Cassette
                 IncludeSubdirectories = true,
                 EnableRaisingEvents = true
             };
-            watcher.Created += HandleFileSystemChange;
-            watcher.Changed += HandleFileSystemChange;
-            watcher.Renamed += HandleFileSystemChange;
-            watcher.Deleted += HandleFileSystemChange;
+
+            watcher.Created += (sender, e) => HandleFileSystemChange(sender, e, factory);
+            watcher.Changed += (sender, e) => HandleFileSystemChange(sender, e, factory);
+            watcher.Renamed += (sender, e) => HandleFileSystemChange(sender, e, factory);
+            watcher.Deleted += (sender, e) => HandleFileSystemChange(sender, e, factory);
         }
 
-        void HandleFileSystemChange(object sender, FileSystemEventArgs e)
+        void HandleFileSystemChange(object sender, FileSystemEventArgs e, IDependencyGraphInteractionFactory factory)
         {
             if (ShouldRecycleOnFileSystemChange(e.FullPath))
             {
-                RecycleApplication();
+                RecycleApplication(factory);
             }
         }
 
@@ -103,7 +106,7 @@ namespace Cassette
             return !ignorePaths.Any(regex => regex.IsMatch(path));
         }
 
-        public void RecycleApplication()
+        public void RecycleApplication(IDependencyGraphInteractionFactory factory)
         {
             if (IsPendingCreation) return; // Already recycled, awaiting first creation.
 
@@ -111,7 +114,6 @@ namespace Cassette
             {
                 if (IsPendingCreation) return;
 
-                var factory = application.Value.GetInteractionFactory();
                 if (creationFailed)
                 {
                     creationFailed = false;

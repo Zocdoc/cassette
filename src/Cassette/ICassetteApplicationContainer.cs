@@ -1,4 +1,5 @@
 using System;
+using Cassette.DependencyGraphInteration;
 
 namespace Cassette
 {
@@ -6,6 +7,6 @@ namespace Cassette
         where T : ICassetteApplication
     {
         T Application { get; }
-        void RecycleApplication();
+        void RecycleApplication(IDependencyGraphInteractionFactory factory);
     }
 }

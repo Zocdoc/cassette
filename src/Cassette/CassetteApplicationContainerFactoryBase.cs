@@ -51,7 +51,7 @@ namespace Cassette
             var container = new CassetteApplicationContainer<T>(CreateApplication);
             if (ShouldWatchFileSystem)
             {
-                container.CreateNewApplicationWhenFileSystemChanges(PhysicalApplicationDirectory);
+                container.CreateNewApplicationWhenFileSystemChanges(PhysicalApplicationDirectory, _dependencyGraphFactory);
             }
             return container;
         }

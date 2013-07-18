@@ -61,7 +61,7 @@ namespace Cassette.Web
             if (requestContext.HttpContext.Request.Form["action"] == "rebuild-cache")
             {
                 Application.Settings.CassetteManifestCache.Clear();
-                container.RecycleApplication();
+                container.RecycleApplication(null);
             }
         }
 
