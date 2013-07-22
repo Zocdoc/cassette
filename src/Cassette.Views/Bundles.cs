@@ -334,6 +334,18 @@ namespace Cassette.Views
             }
         }
 
+        public static IEnumerable<string> GetReferencedLocalizedStrings()
+        {
+            return GetReferencedLocalizedStrings(null);
+        } 
+
+        public static IEnumerable<string> GetReferencedLocalizedStrings(string pageLocation)
+        {
+            var bundles = ReferenceBuilder.GetBundles(pageLocation);
+
+            return bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name);
+        } 
+
         static IHtmlString Render<T>(string location) where T : Bundle
         {
             var result = ExternalGraphInteraction.Render<T>(location);

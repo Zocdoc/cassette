@@ -22,6 +22,7 @@ namespace Cassette
         readonly IFile sourceFile;
         readonly Lazy<byte[]> hash;
         readonly List<AssetReference> references = new List<AssetReference>();
+        readonly List<AssetLocalizedString> localizedStrings = new List<AssetLocalizedString>(); 
 
         public override IFile SourceFile
         {
@@ -36,6 +37,11 @@ namespace Cassette
         public override IEnumerable<AssetReference> References
         {
             get { return references; }
+        }
+
+        public override IEnumerable<AssetLocalizedString> LocalizedStrings
+        {
+            get { return localizedStrings; }
         }
 
         public override void AddReference(string assetRelativePath, int lineNumber)
@@ -104,6 +110,11 @@ namespace Cassette
             if (alreadyExists) return;
 
             references.Add(new AssetReference(relativeFilename, this, -1, AssetReferenceType.RawFilename));
+        }
+
+        public override void AddLocalizedString(string localizedString, int lineNumber)
+        {
+            localizedStrings.Add(new AssetLocalizedString(localizedString, this, lineNumber));
         }
 
         byte[] ComputeHash()

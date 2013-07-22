@@ -19,13 +19,15 @@ namespace Cassette
             {
                 { "assets", ParseAsset },
                 { "references", ParseReference },
-                { "external", ParseExternal }
+                { "external", ParseExternal },
+                { "localizedstrings", ParseLocalizedString }
             };
         }
             
         readonly IFile sourceFile;
         readonly List<string> assetFilenames = new List<string>();
         readonly HashedSet<string> references = new HashedSet<string>(); 
+        readonly HashedSet<string> localizedStrings = new HashedSet<string>();
         readonly Dictionary<string, Action<string>> sectionLineParsers;
         string currentSection = "assets";
         string externalUrl;
@@ -50,6 +52,7 @@ namespace Cassette
             };
             descriptor.AssetFilenames.AddRange(assetFilenames);
             descriptor.References.AddRange(references);
+            descriptor.LocalizedStrings.AddRange(localizedStrings);
             return descriptor;
         }
 
@@ -101,6 +104,11 @@ namespace Cassette
                 line = PathUtilities.NormalizePath(PathUtilities.CombineWithForwardSlashes(sourceFile.Directory.FullPath, line));
             }
             references.Add(line);
+        }
+
+        void ParseLocalizedString(string line)
+        {
+            localizedStrings.Add(line);
         }
 
         void ParseExternal(string line)

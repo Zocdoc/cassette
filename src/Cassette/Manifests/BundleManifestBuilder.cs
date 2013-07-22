@@ -28,6 +28,7 @@ namespace Cassette.Manifests
                 Html = bundle.Render
             };
             AddReferencesToBundleManifest(bundle.References);
+            AddLocalizedStringsToBundleManifest(bundle.LocalizedStrings);
             AddHtmlAttributesToBundleManifest(bundle.HtmlAttributes);
         }
 
@@ -47,6 +48,14 @@ namespace Cassette.Manifests
             foreach (var reference in references)
             {
                 bundleManifest.References.Add(reference);
+            }
+        }
+
+        void AddLocalizedStringsToBundleManifest(IEnumerable<string> localizedStrings)
+        {
+            foreach (var localizedString in localizedStrings)
+            {
+                bundleManifest.LocalizedStrings.Add(localizedString);
             }
         }
 

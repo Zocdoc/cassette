@@ -67,6 +67,14 @@ namespace Cassette.Manifests
             get { throw new NotImplementedException(); }
         }
 
+        public IEnumerable<AssetLocalizedString> LocalizedStrings
+        {
+            get
+            {
+                return originalAssets.SelectMany(a => a.LocalizedStrings);
+            }
+        }
+
         public void AddAssetTransformer(IAssetTransformer transformer)
         {
             throw new NotImplementedException();
@@ -78,6 +86,11 @@ namespace Cassette.Manifests
         }
 
         public void AddRawFileReference(string relativeFilename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddLocalizedString(string localizedString, int lineNumber)
         {
             throw new NotImplementedException();
         }
