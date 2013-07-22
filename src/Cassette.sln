@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassette", "Cassette\Cassette.csproj", "{A5CCF9D3-5D49-4BFC-B9A6-9EC9E0E29C50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassette.UnitTests", "Cassette.UnitTests\Cassette.UnitTests.csproj", "{F200A67A-D7B5-441B-AB36-69AA5C87577E}"

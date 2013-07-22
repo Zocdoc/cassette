@@ -14,6 +14,7 @@ namespace Cassette
             CreateStream = () => content.AsStream();
             SourceFile = new StubFile { FullPath = fullPath };
             References = new List<AssetReference>();
+            LocalizedStrings = new List<AssetLocalizedString>();
         }
 
         public Func<Stream> CreateStream { get; set; }
