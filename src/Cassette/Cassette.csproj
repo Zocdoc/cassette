@@ -112,6 +112,7 @@
     <Compile Include="DependencyGraphInteration\IInteractWithDependencyGraph.cs" />
     <Compile Include="DependencyGraphInteration\InMemory\InMemoryDependencyGraphInteraction.cs" />
     <Compile Include="DependencyGraphInteration\InterationResults\BundleContainerInteractionResult.cs" />
+    <Compile Include="DependencyGraphInteration\InterationResults\EnumerableInterationResult.cs" />
     <Compile Include="DependencyGraphInteration\InterationResults\IInterationResult.cs" />
     <Compile Include="DependencyGraphInteration\InterationResults\ImageExistsInteractionResult.cs" />
     <Compile Include="DependencyGraphInteration\InterationResults\SimpleInteractionResult.cs" />

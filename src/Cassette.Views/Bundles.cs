@@ -319,19 +319,12 @@ namespace Cassette.Views
         public static IEnumerable<string> GetReferencedBundleUrls<T>(string pageLocation)
             where T : Bundle
         {
-            var bundles = ReferenceBuilder.GetBundles(pageLocation).OfType<T>();
-
-            if (Application.Settings.IsDebuggingEnabled)
+            var result = ExternalGraphInteraction.GetReferencedBundleUrls<T>(pageLocation);
+            if (result.Exception != null)
             {
-                return bundles
-                    .SelectMany(GetAllAssets)
-                    .Select(Application.Settings.UrlGenerator.CreateAssetUrl);
+                throw result.Exception;
             }
-            else
-            {
-                return bundles
-                    .Select(Application.Settings.UrlGenerator.CreateBundleUrl);
-            }
+            return result.Enumerable;
         }
 
         public static IEnumerable<string> GetReferencedLocalizedStrings()
@@ -341,9 +334,12 @@ namespace Cassette.Views
 
         public static IEnumerable<string> GetReferencedLocalizedStrings(string pageLocation)
         {
-            var bundles = ReferenceBuilder.GetBundles(pageLocation);
-
-            return bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name);
+            var result = ExternalGraphInteraction.GetReferencedLocalizedStrings(pageLocation);
+            if (result.Exception != null)
+            {
+                throw result.Exception;
+            }
+            return result.Enumerable;
         } 
 
         static IHtmlString Render<T>(string location) where T : Bundle
@@ -369,32 +365,6 @@ namespace Cassette.Views
         static ICassetteApplication Application
         {
             get { return CassetteApplicationContainer.Application; }
-        }
-
-        static IEnumerable<IAsset> GetAllAssets(Bundle bundle)
-        {
-            var collector = new AssetCollector();
-            bundle.Accept(collector);
-            return collector.Assets;
-        }
-
-        class AssetCollector : IBundleVisitor
-        {
-            public AssetCollector()
-            {
-                Assets = new List<IAsset>();
-            }
-
-            public List<IAsset> Assets { get; private set; }
-
-            public void Visit(Bundle bundle)
-            {
-            }
-
-            public void Visit(IAsset asset)
-            {
-                Assets.Add(asset);
-            }
         }
     }
 }

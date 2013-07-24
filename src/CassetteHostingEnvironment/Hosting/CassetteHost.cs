@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using Cassette;
@@ -222,6 +223,95 @@ namespace CassetteHostingEnvironment.Hosting
                 return new ImageExistsInteractionResult
                 {
                     ImageExists = false
+                };
+            });
+        }
+
+        public EnumerableInterationResult<string> GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location)
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = _container.Application.GetReferenceBuilder();
+                foreach (var bundleToReference in referencedBundles)
+                {
+                    referenceBuilder.Reference(bundleToReference.Path, bundleToReference.Location);
+                }
+
+                var bundles = referenceBuilder.GetBundles(location);
+
+                switch (type)
+                {
+                    case BundleType.Script:
+                        bundles = bundles.OfType<ScriptBundle>();
+                        break;
+                    case BundleType.StyleSheet:
+                        bundles = bundles.OfType<StylesheetBundle>();
+                        break;
+                    case BundleType.HtmlTemplate:
+                        bundles = bundles.OfType<HtmlTemplateBundle>();
+                        break;
+                    default:
+                        throw new Exception("Unknown bundle type: " + type.ToString());
+                }
+
+                if (_container.Application.Settings.IsDebuggingEnabled)
+                {
+                    return new EnumerableInterationResult<string>
+                    {
+                        Enumerable = bundles
+                            .SelectMany(GetAllAssets)
+                            .Select(_container.Application.Settings.UrlGenerator.CreateAssetUrl)
+                    };
+                }
+                return new EnumerableInterationResult<string>
+                {
+                    Enumerable = bundles
+                        .Select(_container.Application.Settings.UrlGenerator.CreateBundleUrl)
+                };
+            });
+        }
+
+        private IEnumerable<IAsset> GetAllAssets(Bundle bundle)
+        {
+            var collector = new AssetCollector();
+            bundle.Accept(collector);
+            return collector.Assets;
+        }
+
+        class AssetCollector : IBundleVisitor
+        {
+            public AssetCollector()
+            {
+                Assets = new List<IAsset>();
+            }
+
+            public List<IAsset> Assets { get; private set; }
+
+            public void Visit(Bundle bundle)
+            {
+            }
+
+            public void Visit(IAsset asset)
+            {
+                Assets.Add(asset);
+            }
+        }
+
+        public EnumerableInterationResult<string> GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location)
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = _container.Application.GetReferenceBuilder();
+                foreach (var bundleToReference in referencedBundles)
+                {
+                    referenceBuilder.Reference(bundleToReference.Path, bundleToReference.Location);
+                }
+
+                var bundles = referenceBuilder.GetBundles(location);
+                return new EnumerableInterationResult<string>
+                {
+                    Enumerable =
+                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name)
                 };
             });
         }
