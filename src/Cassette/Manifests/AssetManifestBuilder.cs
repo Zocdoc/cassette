@@ -15,6 +15,10 @@ namespace Cassette.Manifests
             {
                 assetManifest.References.Add(reference);
             }
+            foreach (var localizedString in GetLocalizedStrings(asset))
+            {
+                assetManifest.LocalizedStrings.Add(localizedString);
+            }
             return assetManifest;
         }
 
@@ -27,6 +31,16 @@ namespace Cassette.Manifests
                        Path = r.Path,
                        Type = r.Type,
                        SourceLineNumber = r.SourceLineNumber
+                   };
+        }
+
+        IEnumerable<AssetLocalizedStringManifest> GetLocalizedStrings(IAsset asset)
+        {
+            return from l in asset.LocalizedStrings
+                   select new AssetLocalizedStringManifest
+                   {
+                       LocalizedString = l.Name,
+                       SourceLineNumber = l.SourceLineNumber
                    };
         }
     }

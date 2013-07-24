@@ -46,6 +46,16 @@ namespace Cassette.ScriptAndTemplate
                 AddReference(reference);
             }
 
+            foreach (var localizedString in ScriptBundle.LocalizedStrings)
+            {
+                AddLocalizedString(localizedString);
+            }
+
+            foreach (var localizedString in HtmlTemplateBundle.LocalizedStrings)
+            {
+                AddLocalizedString(localizedString);
+            }
+
             CombinedBundleUtility.RemoveAssetReferences(new[] { ScriptBundle.Path, HtmlTemplateBundle.Path }, assets, settings);
 
             settings.IsDebuggingEnabled = isDebug;

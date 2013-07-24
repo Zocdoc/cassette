@@ -8,8 +8,11 @@ namespace Cassette.BundleProcessing
     {
         enum State { None, InSingleQuote, InDoubleQuote, InRawPath }
 
+        public enum ReferenceType { Asset, LocalizedString }
+
         public class ParsedReference
         {
+            public ReferenceType Type;
             public string Path;
             public int LineNumber;
         }
@@ -27,18 +30,35 @@ namespace Cassette.BundleProcessing
 
             return
                 from comment in comments
-                from path in ParsePaths(comment.Value, asset, comment.LineNumber)
-                select new ParsedReference { Path = path, LineNumber = comment.LineNumber };
+                from reference in ParseReferences(comment.Value, asset, comment.LineNumber)
+                select reference;
         }
 
-        protected virtual IEnumerable<string> ParsePaths(string comment, IAsset sourceAsset, int lineNumber)
+        protected virtual IEnumerable<ParsedReference> ParseReferences(string comment, IAsset sourceAsset, int lineNumber)
         {
+            int i;
+            ReferenceType type;
+
             comment = comment.Trim().TrimEnd(';');
-            if (!comment.StartsWith("@reference")) yield break;
+
+            if (comment.StartsWith("@reference"))
+            {
+                i = 10;
+                type = ReferenceType.Asset;
+            }
+            else if (comment.StartsWith("@localize"))
+            {
+                i = 9;
+                type = ReferenceType.LocalizedString;
+            }
+            else
+            {
+                yield break;
+            }
             
             var state = State.None;
             var pathStart = 0;
-            for (var i = 10; i < comment.Length; i++)
+            for (; i < comment.Length; i++)
             {
                 var c = comment[i];
                 switch (state)
@@ -65,7 +85,13 @@ namespace Cassette.BundleProcessing
                     case State.InSingleQuote:
                         if (c == '\'')
                         {
-                            yield return comment.Substring(pathStart, i - pathStart);
+                            var reference = new ParsedReference
+                            {
+                                Type = type,
+                                Path = comment.Substring(pathStart, i - pathStart),
+                                LineNumber = lineNumber
+                            };
+                            yield return reference;
                             state = State.None;
                         }
                         break;
@@ -73,7 +99,13 @@ namespace Cassette.BundleProcessing
                     case State.InDoubleQuote:
                         if (c == '"')
                         {
-                            yield return comment.Substring(pathStart, i - pathStart);
+                            var reference = new ParsedReference
+                            {
+                                Type = type,
+                                Path = comment.Substring(pathStart, i - pathStart),
+                                LineNumber = lineNumber
+                            };
+                            yield return reference;
                             state = State.None;
                         }
                         break;
@@ -81,7 +113,13 @@ namespace Cassette.BundleProcessing
                     case State.InRawPath:
                         if (char.IsWhiteSpace(c))
                         {
-                            yield return comment.Substring(pathStart, i - pathStart);
+                            var reference = new ParsedReference
+                            {
+                                Type = type,
+                                Path = comment.Substring(pathStart, i - pathStart),
+                                LineNumber = lineNumber
+                            };
+                            yield return reference;
                             state = State.None;
                         }
                         break;
@@ -89,7 +127,13 @@ namespace Cassette.BundleProcessing
             }
             if (state == State.InRawPath)
             {
-                yield return comment.Substring(pathStart);
+                var reference = new ParsedReference
+                {
+                    Type = type,
+                    Path = comment.Substring(pathStart),
+                    LineNumber = lineNumber
+                };
+                yield return reference;
             }
             else if (state == State.InDoubleQuote)
             {

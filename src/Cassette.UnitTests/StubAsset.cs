@@ -14,6 +14,7 @@ namespace Cassette
             CreateStream = () => content.AsStream();
             SourceFile = new StubFile { FullPath = fullPath };
             References = new List<AssetReference>();
+            LocalizedStrings = new List<AssetLocalizedString>();
         }
 
         public Func<Stream> CreateStream { get; set; }
@@ -24,9 +25,16 @@ namespace Cassette
 
         public List<AssetReference> References { get; set; }
 
+        public List<AssetLocalizedString> LocalizedStrings { get; set; }
+
         IEnumerable<AssetReference> IAsset.References
         {
             get { return References; }
+        }
+
+        IEnumerable<AssetLocalizedString> IAsset.LocalizedStrings
+        {
+            get { return LocalizedStrings; }
         }
 
         public void Accept(IBundleVisitor visitor)
@@ -43,6 +51,10 @@ namespace Cassette
         }
 
         public void AddRawFileReference(string relativeFilename)
+        {
+        }
+
+        public void AddLocalizedString(string localizedString, int lineNumber)
         {
         }
 

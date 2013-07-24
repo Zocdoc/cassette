@@ -43,12 +43,22 @@ namespace Cassette.BundleProcessing
             get { return children.SelectMany(c => c.References); }
         }
 
+        public override IEnumerable<AssetLocalizedString> LocalizedStrings
+        {
+            get { return children.SelectMany(c => c.LocalizedStrings); }
+        }
+
         public override void AddReference(string path, int lineNumber)
         {
             throw new NotSupportedException();
         }
 
         public override void AddRawFileReference(string relativeFilename)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void AddLocalizedString(string localizedString, int lineNumber)
         {
             throw new NotSupportedException();
         }

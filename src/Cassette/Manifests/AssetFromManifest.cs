@@ -35,6 +35,16 @@ namespace Cassette.Manifests
             }
         }
 
+        public IEnumerable<AssetLocalizedString> LocalizedStrings
+        {
+            get
+            {
+                return assetManifest.LocalizedStrings.Select(
+                    r => new AssetLocalizedString(r.LocalizedString, this, r.SourceLineNumber)
+                );
+            }
+        }
+
         public void Accept(IBundleVisitor visitor)
         {
             visitor.Visit(this);
@@ -51,6 +61,11 @@ namespace Cassette.Manifests
         }
 
         public void AddRawFileReference(string relativeFilename)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddLocalizedString(string localizedString, int lineNumber)
         {
             throw new NotImplementedException();
         }

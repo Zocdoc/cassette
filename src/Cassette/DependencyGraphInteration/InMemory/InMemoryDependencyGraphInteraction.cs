@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cassette.Configuration;
 using Cassette.DependencyGraphInteration.InterationResults;
 using Cassette.Utilities;
@@ -115,6 +116,69 @@ namespace Cassette.DependencyGraphInteration.InMemory
             {
                 ImageExists = false
             };
+        }
+
+        public EnumerableInterationResult<string> GetReferencedBundleUrls<T>(string location) where T : Bundle
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = application.GetReferenceBuilder();
+                var bundles = referenceBuilder.GetBundles(location).OfType<T>();
+                if (application.Settings.IsDebuggingEnabled)
+                {
+                    return new EnumerableInterationResult<string>
+                    {
+                        Enumerable = bundles
+                            .SelectMany(GetAllAssets)
+                            .Select(application.Settings.UrlGenerator.CreateAssetUrl)
+                    };
+                }
+                return new EnumerableInterationResult<string>
+                {
+                    Enumerable = bundles
+                        .Select(application.Settings.UrlGenerator.CreateBundleUrl)
+                };
+            });
+        }
+
+        private IEnumerable<IAsset> GetAllAssets(Bundle bundle)
+        {
+            var collector = new AssetCollector();
+            bundle.Accept(collector);
+            return collector.Assets;
+        }
+
+        class AssetCollector : IBundleVisitor
+        {
+            public AssetCollector()
+            {
+                Assets = new List<IAsset>();
+            }
+
+            public List<IAsset> Assets { get; private set; }
+
+            public void Visit(Bundle bundle)
+            {
+            }
+
+            public void Visit(IAsset asset)
+            {
+                Assets.Add(asset);
+            }
+        }
+
+        public EnumerableInterationResult<string> GetReferencedLocalizedStrings(string location)
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = application.GetReferenceBuilder();
+                var bundles = referenceBuilder.GetBundles(location);
+                return new EnumerableInterationResult<string>
+                {
+                    Enumerable =
+                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name)
+                };
+            });
         }
 
         private T PerformInteraction<T>(Func<T> action)

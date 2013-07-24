@@ -19,6 +19,7 @@ namespace Cassette
             var filesArray = allFiles.ToArray();
             AddAssets(bundle, filesArray, bundleDescriptor.AssetFilenames);
             AddReferences(bundle, bundleDescriptor.References);
+            AddLocalizedStrings(bundle, bundleDescriptor.LocalizedStrings);
             SetIsSortedIfExplicitFilenames(bundle, bundleDescriptor.AssetFilenames);
             if (bundleDescriptor.IsFromFile)
             {
@@ -99,6 +100,14 @@ namespace Cassette
             foreach (var reference in references)
             {
                 bundle.AddReference(reference);
+            }
+        }
+
+        void AddLocalizedStrings(Bundle bundle, IEnumerable<string> localizedStrings)
+        {
+            foreach (var localizedString in localizedStrings)
+            {
+                bundle.AddLocalizedString(localizedString);
             }
         }
 

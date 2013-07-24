@@ -18,6 +18,7 @@ namespace Cassette
         readonly string path;
         protected readonly List<IAsset> assets = new List<IAsset>();
         readonly HashedSet<string> references = new HashedSet<string>();
+        readonly HashedSet<string> localizedStrings = new HashedSet<string>();
         readonly HtmlAttributeDictionary htmlAttributes = new HtmlAttributeDictionary();
 
         protected Bundle(string applicationRelativePath)
@@ -86,6 +87,11 @@ namespace Cassette
             get { return references; }
         }
 
+        internal IEnumerable<string> LocalizedStrings
+        {
+            get { return localizedStrings; }
+        }
+
         internal bool IsSorted { get; set; }
 
         /// <summary>
@@ -105,6 +111,11 @@ namespace Cassette
         public void AddReference(string bundlePathOrUrl)
         {
             references.Add(ConvertReferenceToAppRelative(bundlePathOrUrl));
+        }
+
+        public void AddLocalizedString(string localizedString)
+        {
+            localizedStrings.Add(localizedString);
         }
 
         internal void Process(CassetteSettings settings)
