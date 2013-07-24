@@ -12,6 +12,7 @@ namespace Cassette.Manifests
         {
             Assets = new List<AssetManifest>();
             References = new List<string>();
+            LocalizedStrings = new List<string>();
             HtmlAttributes = new Dictionary<string, string>();
         }
 
@@ -21,6 +22,7 @@ namespace Cassette.Manifests
         public string PageLocation { get; set; }
         public IList<AssetManifest> Assets { get; private set; }
         public IList<string> References { get; private set; }
+        public IList<string> LocalizedStrings { get; private set; } 
         public IDictionary<string, string> HtmlAttributes { get; private set; }
         public byte[] Content { get; set; }
         public Func<string> Html { get; set; }
@@ -36,6 +38,7 @@ namespace Cassette.Manifests
                 bundle.Assets.Add(CreateCachedBundleContent(settings));
             }
             AddReferencesToBundle(bundle);
+            AddLocalizedStringsToBundle(bundle);
             AddHtmlAttributesToBundle(bundle);
             return bundle;
         }
@@ -69,6 +72,14 @@ namespace Cassette.Manifests
             foreach (var reference in References)
             {
                 bundle.AddReference(reference);
+            }
+        }
+
+        void AddLocalizedStringsToBundle(Bundle bundle)
+        {
+            foreach (var localizedString in LocalizedStrings)
+            {
+                bundle.AddLocalizedString(localizedString);
             }
         }
 

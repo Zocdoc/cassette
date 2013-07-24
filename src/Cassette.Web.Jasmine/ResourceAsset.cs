@@ -44,6 +44,11 @@ namespace Cassette.Web.Jasmine
             get { yield break; }
         }
 
+        public IEnumerable<AssetLocalizedString> LocalizedStrings
+        {
+            get { yield break; }
+        }
+
         public void Accept(IBundleVisitor visitor)
         {
             visitor.Visit(this);
@@ -59,6 +64,10 @@ namespace Cassette.Web.Jasmine
         }
 
         public void AddRawFileReference(string relativeFilename)
+        {
+        }
+
+        public void AddLocalizedString(string localizedString, int lineNumber)
         {
         }
 

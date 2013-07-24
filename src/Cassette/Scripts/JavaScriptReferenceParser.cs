@@ -17,19 +17,24 @@ namespace Cassette.Scripts
         {
         }
 
-        protected override IEnumerable<string> ParsePaths(string comment, IAsset sourceAsset, int lineNumber)
+        protected override IEnumerable<ParsedReference> ParseReferences(string comment, IAsset sourceAsset, int lineNumber)
         {
-            var simplePaths = base.ParsePaths(comment, sourceAsset, lineNumber);
-            var xmlCommentPaths = ParseXmlDocCommentPaths(comment);
+            var simplePaths = base.ParseReferences(comment, sourceAsset, lineNumber);
+            var xmlCommentPaths = ParseXmlDocCommentPaths(comment, lineNumber);
             return simplePaths.Concat(xmlCommentPaths);
         }
 
-        static IEnumerable<string> ParseXmlDocCommentPaths(string comment)
+        static IEnumerable<ParsedReference> ParseXmlDocCommentPaths(string comment, int lineNumber)
         {
             return ReferenceRegex
                 .Matches(comment)
                 .Cast<Match>()
-                .Select(m => m.Groups["path"].Value);
+                .Select(m => new ParsedReference
+                {
+                    Type = ReferenceType.Asset,
+                    Path = m.Groups["path"].Value,
+                    LineNumber = lineNumber
+                });
         }
     }
 }

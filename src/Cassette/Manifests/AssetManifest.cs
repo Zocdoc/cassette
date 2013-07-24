@@ -10,10 +10,12 @@ namespace Cassette.Manifests
         public AssetManifest()
         {
             References = new List<AssetReferenceManifest>();
+            LocalizedStrings = new List<AssetLocalizedStringManifest>();
         }
 
         public string Path { get; set; }
         public IList<AssetReferenceManifest> References { get; private set; }
+        public IList<AssetLocalizedStringManifest> LocalizedStrings { get; private set; }
         
         public override bool Equals(object obj)
         {

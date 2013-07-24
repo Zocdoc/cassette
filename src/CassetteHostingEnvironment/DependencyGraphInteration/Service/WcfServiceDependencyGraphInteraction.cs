@@ -138,5 +138,25 @@ namespace CassetteHostingEnvironment.DependencyGraphInteration.Service
                 return hostService.ImageExists(path);
             });
         }
+
+        public EnumerableInterationResult<string> GetReferencedBundleUrls<T>(string location) where T : Bundle
+        {
+            return _utility.PerformInteraction(hostService =>
+            {
+                var type = typeof(T);
+                var bundleType = TypeToBundleType[type];
+                var bundles = _provider.GetCachedValue();
+                return hostService.GetReferencedBundleUrls(bundles, bundleType, location);
+            });
+        }
+
+        public EnumerableInterationResult<string> GetReferencedLocalizedStrings(string location)
+        {
+            return _utility.PerformInteraction(hostService =>
+            {
+                var bundles = _provider.GetCachedValue();
+                return hostService.GetReferencedLocalizedStrings(bundles, location);
+            });
+        }
     }
 }

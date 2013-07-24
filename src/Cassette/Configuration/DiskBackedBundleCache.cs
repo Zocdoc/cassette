@@ -159,7 +159,8 @@ namespace Cassette.Configuration
                 }
                 var file = fileHelper.GetFileSystemFile(directory, systemAbsoluteFilename, CacheDirectory);
                 var fileAsset = new FileAsset(file, bundle);
-                if (!GetAssetReferencesFromDisk(fileHelper, fileAsset, systemAbsoluteFilename))
+                if (!GetAssetReferencesFromDisk(fileHelper, fileAsset, systemAbsoluteFilename) ||
+                    !GetAssetLocalizedStringsFromDisk(fileHelper, fileAsset, systemAbsoluteFilename))
                 {
                     continue;
                 }
@@ -204,6 +205,16 @@ namespace Cassette.Configuration
                 });
             }
             fileHelper.Write(systemAbsoluteFilename + "references", JsonConvert.SerializeObject(refHolderList));
+            var localizedStringHolderList = new List<LocalizedStringHolder>();
+            foreach (AssetLocalizedString assetLocalizedString in asset.LocalizedStrings)
+            {
+                localizedStringHolderList.Add(new LocalizedStringHolder
+                {
+                    LocalizedString = assetLocalizedString.Name,
+                    LineNumber = assetLocalizedString.SourceLineNumber
+                });
+            }
+            fileHelper.Write(systemAbsoluteFilename + "localizedstrings", JsonConvert.SerializeObject(localizedStringHolderList));
         }
 
         public bool GetAssetReferencesFromDisk(IFileHelper fileHelper, FileAsset fileAsset,
@@ -225,6 +236,22 @@ namespace Cassette.Configuration
                 {
                     fileAsset.AddReference(refHolder.Path, refHolder.LineNumber);
                 }
+            }
+            return true;
+        }
+
+        public bool GetAssetLocalizedStringsFromDisk(IFileHelper fileHelper, FileAsset fileAsset,
+                                               string systemAbsoluteFilename)
+        {
+            if (!fileHelper.Exists(systemAbsoluteFilename + "localizedstrings"))
+            {
+                return false;
+            }
+            var localizedStringHolderList = JsonConvert.DeserializeObject<List<LocalizedStringHolder>>
+                (fileHelper.ReadAllText(systemAbsoluteFilename + "localizedstrings"));
+            foreach (LocalizedStringHolder localizedStringHolder in localizedStringHolderList)
+            {
+                fileAsset.AddLocalizedString(localizedStringHolder.LocalizedString, localizedStringHolder.LineNumber);
             }
             return true;
         }
@@ -272,6 +299,16 @@ namespace Cassette.Configuration
             public AssetReferenceType AssetReferenceType;
             public int LineNumber;
             public string Path;
+        }
+
+        #endregion
+
+        #region Nested type: LocalizedStringHolder
+
+        class LocalizedStringHolder
+        {
+            public int LineNumber;
+            public string LocalizedString;
         }
 
         #endregion

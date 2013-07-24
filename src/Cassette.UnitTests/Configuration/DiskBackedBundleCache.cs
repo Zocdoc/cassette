@@ -298,7 +298,7 @@ namespace Cassette.Configuration
             fileBundle.Assets.First().References.First().Path.Equals(fileAssetChild.SourceFile.FullPath);
             fileHelper.Verify();
             fileHelper.Verify(fh => fh.Write(It.IsAny<string>(), "[{\"AssetReferenceType\":1,\"LineNumber\":1,\"Path\":\"~/file2\"}]"), Times.Once());
-            fileHelper.Verify(fh => fh.Write(It.IsAny<string>(), "[]"), Times.Once());
+            fileHelper.Verify(fh => fh.Write(It.IsAny<string>(), "[]"), Times.Exactly(3));
             fileHelper.Verify(fh => fh.Write(It.IsAny<string>(), "asset content"), Times.Exactly(2));
         }
 

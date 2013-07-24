@@ -35,7 +35,14 @@ namespace Cassette.BundleProcessing
             var references = referenceParser.Parse(code, asset);
             foreach (var reference in references)
             {
-                asset.AddReference(reference.Path, reference.LineNumber);
+                if (reference.Type == ReferenceParser.ReferenceType.Asset)
+                {
+                    asset.AddReference(reference.Path, reference.LineNumber);
+                }
+                else
+                {
+                    asset.AddLocalizedString(reference.Path, reference.LineNumber);
+                }
             }
         }
 

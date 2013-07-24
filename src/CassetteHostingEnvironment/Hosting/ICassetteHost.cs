@@ -38,5 +38,12 @@ namespace CassetteHostingEnvironment.Hosting
         [FaultContract(typeof(GeneralFault))]
         ImageExistsInteractionResult ImageExists(string path);
 
+        [OperationContract]
+        [FaultContract(typeof(GeneralFault))]
+        EnumerableInterationResult<string> GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location);
+
+        [OperationContract]
+        [FaultContract(typeof(GeneralFault))]
+        EnumerableInterationResult<string> GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location);
     }
 }

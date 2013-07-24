@@ -34,6 +34,7 @@ namespace Cassette.Manifests
             };
             AddAssets(manifest);
             AddReferences(manifest);
+            AddLocalizedStrings(manifest);
             AddHtmlAttributes(manifest);
             InitializeBundleManifest(manifest, element);
             return manifest;
@@ -108,6 +109,15 @@ namespace Cassette.Manifests
             }
         }
 
+        void AddLocalizedStrings(BundleManifest manifest)
+        {
+            var localizedStrings = GetLocalizedStrings();
+            foreach (var localizedString in localizedStrings)
+            {
+                manifest.LocalizedStrings.Add(localizedString);
+            }
+        }
+
         void AddHtmlAttributes(BundleManifest manifest)
         {
             var attributeElements = element.Elements("HtmlAttribute");
@@ -138,11 +148,25 @@ namespace Cassette.Manifests
             return referenceElements.Select(GetReferencePathAttribute);
         }
 
+        IEnumerable<string> GetLocalizedStrings()
+        {
+            var localizedStringElements = element.Elements("LocalizedString");
+            return localizedStringElements.Select(GetLocalizedStringNameAttribute);
+        } 
+
         string GetReferencePathAttribute(XElement referenceElement)
         {
             return referenceElement.AttributeValueOrThrow(
                 "Path",
                 () => new InvalidCassetteManifestException("Reference manifest element missing \"Path\" attribute.")
+            );
+        }
+
+        string GetLocalizedStringNameAttribute(XElement localizedStringElement)
+        {
+            return localizedStringElement.AttributeValueOrThrow(
+                "Name",
+                () => new InvalidCassetteManifestException("LocalizedString manifest element missing \"Name\" attribute.")
             );
         }
     }
