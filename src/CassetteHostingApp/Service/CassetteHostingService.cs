@@ -19,6 +19,12 @@ namespace CassetteHostingEnvironment
             //Run();\
             var service = new CassetteHostingService();
             service.OnStart(null);
+            Console.WriteLine("You have launched the out of process Cassette hosting app.");
+            Console.WriteLine("");
+            Console.WriteLine("Just let this window hang out and host your cassette for you.");
+            Console.WriteLine("");
+            Console.WriteLine("When you want to shut it down, just hit enter.");
+            Console.WriteLine("");
             Console.ReadLine();
         }
 
