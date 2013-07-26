@@ -227,7 +227,7 @@ namespace CassetteHostingEnvironment.Hosting
             });
         }
 
-        public EnumerableInterationResult<string> GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location)
+        public EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location)
         {
             return PerformInteraction(() =>
             {
@@ -256,17 +256,19 @@ namespace CassetteHostingEnvironment.Hosting
 
                 if (_container.Application.Settings.IsDebuggingEnabled)
                 {
-                    return new EnumerableInterationResult<string>
+                    return new EnumerableInterationResult
                     {
                         Enumerable = bundles
                             .SelectMany(GetAllAssets)
                             .Select(_container.Application.Settings.UrlGenerator.CreateAssetUrl)
+                            .ToArray()
                     };
                 }
-                return new EnumerableInterationResult<string>
+                return new EnumerableInterationResult
                 {
                     Enumerable = bundles
                         .Select(_container.Application.Settings.UrlGenerator.CreateBundleUrl)
+                        .ToArray()
                 };
             });
         }
@@ -297,7 +299,7 @@ namespace CassetteHostingEnvironment.Hosting
             }
         }
 
-        public EnumerableInterationResult<string> GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location)
+        public EnumerableInterationResult GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location)
         {
             return PerformInteraction(() =>
             {
@@ -308,10 +310,10 @@ namespace CassetteHostingEnvironment.Hosting
                 }
 
                 var bundles = referenceBuilder.GetBundles(location);
-                return new EnumerableInterationResult<string>
+                return new EnumerableInterationResult
                 {
                     Enumerable =
-                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name)
+                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.LocalizedStrings).Select(l => l.Name).ToArray()
                 };
             });
         }

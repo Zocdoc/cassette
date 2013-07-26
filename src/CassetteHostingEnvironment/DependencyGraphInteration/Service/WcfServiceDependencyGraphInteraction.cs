@@ -139,7 +139,7 @@ namespace CassetteHostingEnvironment.DependencyGraphInteration.Service
             });
         }
 
-        public EnumerableInterationResult<string> GetReferencedBundleUrls<T>(string location) where T : Bundle
+        public EnumerableInterationResult GetReferencedBundleUrls<T>(string location) where T : Bundle
         {
             return _utility.PerformInteraction(hostService =>
             {
@@ -150,7 +150,7 @@ namespace CassetteHostingEnvironment.DependencyGraphInteration.Service
             });
         }
 
-        public EnumerableInterationResult<string> GetReferencedLocalizedStrings(string location)
+        public EnumerableInterationResult GetReferencedLocalizedStrings(string location)
         {
             return _utility.PerformInteraction(hostService =>
             {

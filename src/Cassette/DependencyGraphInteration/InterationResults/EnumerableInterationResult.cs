@@ -2,8 +2,8 @@
 
 namespace Cassette.DependencyGraphInteration.InterationResults
 {
-    public class EnumerableInterationResult<T> : SimpleInteractionResult
+    public class EnumerableInterationResult : SimpleInteractionResult
     {
-        public IEnumerable<T> Enumerable { get; set; }
+        public string[] Enumerable { get; set; }
     }
 }

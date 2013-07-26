@@ -40,10 +40,10 @@ namespace CassetteHostingEnvironment.Hosting
 
         [OperationContract]
         [FaultContract(typeof(GeneralFault))]
-        EnumerableInterationResult<string> GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location);
+        EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location);
 
         [OperationContract]
         [FaultContract(typeof(GeneralFault))]
-        EnumerableInterationResult<string> GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location);
+        EnumerableInterationResult GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location);
     }
 }
