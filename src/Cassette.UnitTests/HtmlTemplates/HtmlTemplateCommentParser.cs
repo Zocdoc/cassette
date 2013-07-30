@@ -54,5 +54,33 @@ namespace Cassette.HtmlTemplates
         {
             parser.Parse("<div></div>").ToArray().Length.ShouldEqual(0);
         }
+
+        [Fact]
+        public void WhenParseHtmlCommentWithI18NSameLine_ThenReturnLocalizeComment()
+        {
+            var comment = parser.Parse("<div>{{#i18n}}Test.Localized.String{{/i18n}}</div>").Single();
+            comment.Value.ShouldEqual("@localize Test.Localized.String");
+        }
+
+        [Fact]
+        public void WhenParseHtmlCommentWithI18NSameLineWithSpaces_ThenReturnLocalizeComment()
+        {
+            var comment = parser.Parse("<div>{{# i18n }}Test.Localized.String{{/ i18n }}</div>").Single();
+            comment.Value.ShouldEqual("@localize Test.Localized.String");
+        }
+
+        [Fact]
+        public void WhenParseHtmlCommentWithI18NDifferentLines_ThenReturnLocalizeComment()
+        {
+            var comment = parser.Parse("<div>\r{{#i18n}}\r\nTest.Localized.String\n{{/i18n}}\r\n</div>").Single();
+            comment.Value.ShouldEqual("@localize Test.Localized.String");
+        }
+
+        [Fact]
+        public void WhenParseHtmlCommentWithI18NDifferentLinesWithSpaces_ThenReturnLocalizeComment()
+        {
+            var comment = parser.Parse("<div>\r{{# i18n }}\r\nTest.Localized.String\n{{/ i18n }}\r\n</div>").Single();
+            comment.Value.ShouldEqual("@localize Test.Localized.String");
+        }
     }
 }

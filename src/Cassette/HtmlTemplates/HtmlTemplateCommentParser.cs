@@ -4,11 +4,12 @@ using Cassette.BundleProcessing;
 namespace Cassette.HtmlTemplates
 {
     class HtmlTemplateCommentParser : ICommentParser
-    {
-        enum State
+    {        enum State
         {
-            Code, Comment
+            Code, Comment, I18N
         }
+
+        const string Localize = "@localize ";
 
         public IEnumerable<Comment> Parse(string code)
         {
@@ -39,6 +40,18 @@ namespace Cassette.HtmlTemplates
                             state = State.Comment;
                             i += 3;
                             commentStart = i + 1;
+                        }
+                        else if (i < code.Length - 9 && code.Substring(i, 9) == "{{#i18n}}")
+                        {
+                            state = State.I18N;
+                            i += 9;
+                            commentStart = i;
+                        }
+                        else if (i < code.Length - 11 && code.Substring(i, 11) == "{{# i18n }}")
+                        {
+                            state = State.I18N;
+                            i += 11;
+                            commentStart = i;
                         }
                         break;
 
@@ -77,6 +90,29 @@ namespace Cassette.HtmlTemplates
                             i++;
                             line++;
                             commentStart = i;
+                        }
+                        break;
+
+                    case State.I18N:
+                        if (i < code.Length - 9 && code.Substring(i, 9) == "{{/i18n}}")
+                        {
+                            yield return new Comment
+                            {
+                                LineNumber = line,
+                                Value = Localize + code.Substring(commentStart, i - commentStart).Trim()
+                            };
+                            i += 9;
+                            state = State.Code;
+                        }
+                        else if (i < code.Length - 11 && code.Substring(i, 11) == "{{/ i18n }}")
+                        {
+                            yield return new Comment
+                            {
+                                LineNumber = line,
+                                Value = Localize + code.Substring(commentStart, i - commentStart).Trim()
+                            };
+                            i += 9;
+                            state = State.I18N;
                         }
                         break;
                 }
