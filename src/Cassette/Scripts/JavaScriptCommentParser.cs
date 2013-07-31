@@ -41,7 +41,6 @@ namespace Cassette.Scripts
                         if (i < code.Length - 7 && code.Substring(i, 7) == "i18n.t(")
                         {
                             state = State.I18N;
-                            commentStart = i + 7;
                             i += 6;
                             continue;
                         }
