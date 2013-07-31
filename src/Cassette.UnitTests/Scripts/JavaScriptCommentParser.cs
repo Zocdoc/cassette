@@ -94,5 +94,38 @@ namespace Cassette.Scripts
             comment.LineNumber.ShouldEqual(2);
             comment.Value.ShouldEqual("@localize Localized.String.Here");
         }
+
+        [Fact]
+        public void WhenParseLocalizedStringComplex_DontReturnInvalidComments()
+        {
+            var js =
+                @"Hogan.Template.prototype.render = function render(context, partials, indent) {
+    
+    context = context || {};
+    
+    context.i18n = function () {
+        return function (s) {
+            
+            if (!i18n
+                || typeof i18n.t !== 'function')
+            {
+                throw new Error('Could not find locale data.');
+            }
+            
+            if (!i18n.t(s))
+            {
+                throw new Error('Could not find locale data for key: ""' + s + '""');
+            }
+            
+            return i18n.t(s);
+        };
+    };
+    
+    return this.ri([context], partials || {}, indent);
+};";
+            var parser = new JavaScriptCommentParser();
+            var comments = parser.Parse(js).ToArray();
+            comments.Length.ShouldEqual(0);
+        }
     }
 }

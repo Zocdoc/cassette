@@ -82,5 +82,57 @@ namespace Cassette.HtmlTemplates
             var comment = parser.Parse("<div>\r{{# i18n }}\r\nTest.Localized.String\n{{/ i18n }}\r\n</div>").Single();
             comment.Value.ShouldEqual("@localize Test.Localized.String");
         }
+
+        [Fact]
+        public void WhenParseHtmlCommentWithI18NComplex_ThenReturnLocalizeComments()
+        {
+            var mustache =
+                @"<div class=""-dialog-close -close"" data-test=""close-modal""></div>
+<div class=""-header-bar"">
+  <div class=""-header-text"">
+	{{#IsLive}}
+		{{#i18n}}
+            Csr.CustomSearchExperience.Footer.TurnOffAllTheThings{{/ i18n }}
+	{{/IsLive}}
+	{{^IsLive}}
+		{{# i18n }}
+            Csr.CustomSearchExperience.Footer.TurnOnAllTheThings
+        {{/i18n}}
+	{{/IsLive}}
+  </div>
+</div>
+<div class=""-body"">
+	<img class=""-all-the-things"" src=""/images/csr/customsearchexperience/allthethings.png""/>
+	<div class=""-warning"">
+		{{#IsLive}}
+			{{#i18n}}Csr.CustomSearchExperience.Footer.TurnOffHowSureAreYou{{/i18n}}
+		{{/IsLive}}
+		{{^IsLive}}
+			{{# i18n }}Csr.CustomSearchExperience.Footer.TurnOnHowSureAreYou{{/ i18n }}
+		{{/IsLive}}
+	</div>
+	<div class=""-options"">
+		<div class=""-submit-column"">
+			<span class=""-button-primary "">
+				{{# i18n }}Csr.CustomSearchExperience.Footer.EleventyBillion{{/ i18n }}
+				<button type=""submit"" name=""EleventyBillion"" data-test=""EleventyBillion"" id=""submit"">{{# i18n }}Csr.CustomSearchExperience.Footer.EleventyBillion{{/ i18n }}</button>
+			</span>
+		</div>
+		<div class=""-cancel-column"">
+				<a class=""-cancel"">{{# i18n }}Csr.CustomSearchExperience.Footer.Cancel{{/ i18n }}</a>
+		</div>
+		
+	</div>
+</div>";
+            var comments = parser.Parse(mustache).ToArray();
+            comments.Length.ShouldEqual(7);
+            comments[0].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.TurnOffAllTheThings");
+            comments[1].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.TurnOnAllTheThings");
+            comments[2].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.TurnOffHowSureAreYou");
+            comments[3].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.TurnOnHowSureAreYou");
+            comments[4].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.EleventyBillion");
+            comments[5].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.EleventyBillion");
+            comments[6].Value.ShouldEqual("@localize Csr.CustomSearchExperience.Footer.Cancel");
+        }
     }
 }

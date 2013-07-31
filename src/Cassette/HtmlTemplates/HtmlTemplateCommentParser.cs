@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cassette.BundleProcessing;
 
 namespace Cassette.HtmlTemplates
@@ -56,7 +57,7 @@ namespace Cassette.HtmlTemplates
                         break;
 
                     case State.Comment:
-                        if (code.Substring(i, 3) == "-->")
+                        if (i < code.Length - 3 && code.Substring(i, 3) == "-->")
                         {
                             yield return new Comment
                             {
@@ -111,8 +112,8 @@ namespace Cassette.HtmlTemplates
                                 LineNumber = line,
                                 Value = Localize + code.Substring(commentStart, i - commentStart).Trim()
                             };
-                            i += 9;
-                            state = State.I18N;
+                            i += 11;
+                            state = State.Code;
                         }
                         break;
                 }

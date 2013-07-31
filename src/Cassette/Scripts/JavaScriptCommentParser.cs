@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cassette.BundleProcessing;
 
 namespace Cassette.Scripts
@@ -41,7 +42,7 @@ namespace Cassette.Scripts
                         {
                             state = State.I18N;
                             commentStart = i + 7;
-                            i = i + 6;
+                            i += 6;
                             continue;
                         }
                         if (c != '/') continue;
@@ -124,29 +125,28 @@ namespace Cassette.Scripts
                         break;
 
                     case State.I18N:
-                        // Scan forward until we get past the open quote for the string.
-                        while (i < code.Length && code[i] != '\'' && code[i] != '"')
+                        switch (code[i])
                         {
-                            switch (code[i])
-                            {
-                                case '\r':
-                                case '\n':
-                                    line++;
-                                    break;
-                            }
-                            i++;
+                            // Whitespace is allowed
+                            case '\t':
+                            case ' ':
+                                continue;
+
+                            // If we found the open quote, we can begin
+                            case '\'':
+                            case '"':
+                                i++;
+                                break;
+
+                            // If we found any other symbols, this isn't a localized string we can reference
+                            default:
+                                state = State.Code;
+                                continue;
                         }
-                        i++;
                         commentStart = i;
+                        // Scan until we find the closing quote
                         while (i < code.Length && code[i] != '\'' && code[i] != '"')
                         {
-                            switch (code[i])
-                            {
-                                case '\r':
-                                case '\n':
-                                    line++;
-                                    break;
-                            }
                             i++;
                         }
                         yield return new Comment
