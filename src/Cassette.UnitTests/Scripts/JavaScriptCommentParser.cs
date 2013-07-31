@@ -58,5 +58,41 @@ namespace Cassette.Scripts
             comments[1].LineNumber.ShouldEqual(2);
             comments[1].Value.ShouldEqual("text2");
         }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineSingleQuotes_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t('Localized.String.Here');").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineDoubleQuotes_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(\"Localized.String.Here\");").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineWeirdSpacing_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(   'Localized.String.Here' );").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnMultipleLines_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(\r'Localized.String.Here'\n);").Single();
+            comment.LineNumber.ShouldEqual(2);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
     }
 }

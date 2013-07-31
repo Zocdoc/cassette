@@ -7,7 +7,7 @@ namespace Cassette.Scripts
     {
         enum State
         {
-            Code, SingleLineComment, MultiLineComment
+            Code, SingleLineComment, MultiLineComment, I18N
         }
 
         public IEnumerable<Comment> Parse(string code)
@@ -37,6 +37,13 @@ namespace Cassette.Scripts
                 switch (state)
                 {
                     case State.Code:
+                        if (i < code.Length - 7 && code.Substring(i, 7) == "i18n.t(")
+                        {
+                            state = State.I18N;
+                            commentStart = i + 7;
+                            i = i + 6;
+                            continue;
+                        }
                         if (c != '/') continue;
                         if (i >= code.Length - 2) yield break;
                         if (code[i + 1] == '/')
@@ -113,6 +120,40 @@ namespace Cassette.Scripts
                             Value = code.Substring(commentStart, i - commentStart)
                         };
                         i++; // Skip the '/'
+                        state = State.Code;
+                        break;
+
+                    case State.I18N:
+                        // Scan forward until we get past the open quote for the string.
+                        while (i < code.Length && code[i] != '\'' && code[i] != '"')
+                        {
+                            switch (code[i])
+                            {
+                                case '\r':
+                                case '\n':
+                                    line++;
+                                    break;
+                            }
+                            i++;
+                        }
+                        i++;
+                        commentStart = i;
+                        while (i < code.Length && code[i] != '\'' && code[i] != '"')
+                        {
+                            switch (code[i])
+                            {
+                                case '\r':
+                                case '\n':
+                                    line++;
+                                    break;
+                            }
+                            i++;
+                        }
+                        yield return new Comment
+                        {
+                            LineNumber = line,
+                            Value = "@localize " +  code.Substring(commentStart, i - commentStart)
+                        };
                         state = State.Code;
                         break;
                 }
