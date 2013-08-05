@@ -14,7 +14,7 @@ namespace Cassette.DependencyGraphInteration
         StreamInterationResult GetBundle<T>(string path)
             where T : Bundle;
         ImageExistsInteractionResult ImageExists(string path);
-        EnumerableInterationResult GetReferencedBundleUrls<T>(string location)
+        EnumerableInterationResult GetReferencedBundleUrls<T>(string location, bool absoluteUrl)
             where T : Bundle;
         EnumerableInterationResult GetReferencedLocalizedStrings(string location);
     }

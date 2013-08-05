@@ -159,7 +159,7 @@ namespace Cassette.Web
             var external = bundle as IExternalBundle;
             if (external == null)
             {
-                return urlGenerator.CreateBundleUrl(bundle);
+                return urlGenerator.CreateBundleUrl(bundle, false);
             }
             else
             {
