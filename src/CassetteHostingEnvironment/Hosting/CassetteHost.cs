@@ -28,7 +28,7 @@ namespace CassetteHostingEnvironment.Hosting
             return PerformInteraction(() =>
             {
                 var currentFile = File.ReadAllText(settings.ConfigurationFileLocation);
-                if (_container == null || _settingsFile != currentFile )
+                if (_container == null || _container.CreationFailed || _settingsFile != currentFile)
                 {
                     _settingsFile = currentFile;
                     var newAssemblyLocation = DiskBackedBundleCache.CacheDirectory + Guid.NewGuid().ToString() + ".dll";

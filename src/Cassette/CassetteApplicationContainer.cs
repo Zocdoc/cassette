@@ -50,7 +50,7 @@ namespace Cassette
         readonly Func<T> createApplication;
         FileSystemWatcher watcher;
         Lazy<T> application;
-        bool creationFailed;
+        public bool CreationFailed { get; set; }
         readonly List<Regex> ignorePaths = new List<Regex>();
 
         public CassetteApplicationContainer(Func<T> createApplication)
@@ -114,9 +114,9 @@ namespace Cassette
             {
                 if (IsPendingCreation) return;
 
-                if (creationFailed)
+                if (CreationFailed)
                 {
-                    creationFailed = false;
+                    CreationFailed = false;
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace Cassette
 
         bool IsPendingCreation
         {
-            get { return creationFailed == false && application.IsValueCreated == false; }
+            get { return CreationFailed == false && application.IsValueCreated == false; }
         }
 
         T CreateApplication()
@@ -143,12 +143,12 @@ namespace Cassette
             try
             {
                 var app = createApplication();
-                creationFailed = false;
+                CreationFailed = false;
                 return app;
             }
             catch(Exception e)
             {
-                creationFailed = true;
+                CreationFailed = true;
                 throw e; 
             }
         }
