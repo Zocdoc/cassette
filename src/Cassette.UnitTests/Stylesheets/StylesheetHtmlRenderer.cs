@@ -14,7 +14,7 @@ namespace Cassette.Stylesheets
             bundle.HtmlAttributes.Add("class", "cssx");
 
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                 .Returns("URL")
                 .Verifiable();
 
@@ -34,7 +34,7 @@ namespace Cassette.Stylesheets
                 Media = "MEDIA"
             };
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                 .Returns("URL");
 
             var renderer = new StylesheetHtmlRenderer(urlGenerator.Object);
@@ -51,7 +51,7 @@ namespace Cassette.Stylesheets
                 Condition = "CONDITION"
             };
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle)).Returns("URL");
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false)).Returns("URL");
 
             var renderer = new StylesheetHtmlRenderer(urlGenerator.Object);
             var html = renderer.Render(bundle);
@@ -71,7 +71,7 @@ namespace Cassette.Stylesheets
                 Condition = "(gt IE 9)| !IE"
             };
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle)).Returns("URL");
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false)).Returns("URL");
 
             var renderer = new StylesheetHtmlRenderer(urlGenerator.Object);
             var html = renderer.Render(bundle);

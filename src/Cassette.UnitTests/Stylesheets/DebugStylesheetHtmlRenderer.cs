@@ -17,7 +17,7 @@ namespace Cassette.Stylesheets
 
             var urlGenerator = new Mock<IUrlGenerator>();
             var assetUrls = new Queue<string>(new[] { "asset1", "asset2" });
-            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>()))
+            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>(), It.IsAny<bool>()))
                         .Returns(assetUrls.Dequeue);
 
             var renderer = new DebugStylesheetHtmlRenderer(urlGenerator.Object);
@@ -42,7 +42,7 @@ namespace Cassette.Stylesheets
 
             var urlGenerator = new Mock<IUrlGenerator>();
             var assetUrls = new Queue<string>(new[] { "asset1", "asset2" });
-            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>()))
+            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>(), It.IsAny<bool>()))
                         .Returns(assetUrls.Dequeue);
 
             var renderer = new DebugStylesheetHtmlRenderer(urlGenerator.Object);
@@ -67,7 +67,7 @@ namespace Cassette.Stylesheets
 
             var urlGenerator = new Mock<IUrlGenerator>();
             var assetUrls = new Queue<string>(new[] { "asset1", "asset2" });
-            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>()))
+            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>(), It.IsAny<bool>()))
                         .Returns(assetUrls.Dequeue);
 
             var renderer = new DebugStylesheetHtmlRenderer(urlGenerator.Object);
@@ -94,7 +94,7 @@ namespace Cassette.Stylesheets
 
             var urlGenerator = new Mock<IUrlGenerator>();
             var assetUrls = new Queue<string>(new[] { "asset1", "asset2" });
-            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>()))
+            urlGenerator.Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>(), It.IsAny<bool>()))
                         .Returns(assetUrls.Dequeue);
 
             var renderer = new DebugStylesheetHtmlRenderer(urlGenerator.Object);

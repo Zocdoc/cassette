@@ -107,7 +107,7 @@ namespace Cassette.Scripts
             asset.Setup(a => a.OpenStream()).Returns(Stream.Null);
             bundle.Assets.Add(asset.Object);
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle)).Returns("/");
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false)).Returns("/");
             var settings = new CassetteSettings("") { UrlGenerator = urlGenerator.Object };
             bundle.Process(settings);
             

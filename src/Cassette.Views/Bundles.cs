@@ -305,10 +305,10 @@ namespace Cassette.Views
         /// Get the URLs for bundles that have been referenced during the current request.
         /// </summary>
         /// <typeparam name="T">The type of bundles.</typeparam>        
-        public static IEnumerable<string> GetReferencedBundleUrls<T>()
+        public static IEnumerable<string> GetReferencedBundleUrls<T>(bool absoluteUrl = false)
             where T : Bundle
         {
-            return GetReferencedBundleUrls<T>(null);
+            return GetReferencedBundleUrls<T>(null, absoluteUrl);
         }
 
         /// <summary>
@@ -316,10 +316,11 @@ namespace Cassette.Views
         /// </summary>
         /// <typeparam name="T">The type of bundles.</typeparam>
         /// <param name="pageLocation">Optional. The page location of bundles to return.</param>
-        public static IEnumerable<string> GetReferencedBundleUrls<T>(string pageLocation)
+        /// <param name="absoluteUrl">Optional. Whether to return the absolute URLs for the bundles. Defaults to false.</param>
+        public static IEnumerable<string> GetReferencedBundleUrls<T>(string pageLocation, bool absoluteUrl = false)
             where T : Bundle
         {
-            var result = ExternalGraphInteraction.GetReferencedBundleUrls<T>(pageLocation);
+            var result = ExternalGraphInteraction.GetReferencedBundleUrls<T>(pageLocation, absoluteUrl);
             if (result.Exception != null)
             {
                 throw result.Exception;
