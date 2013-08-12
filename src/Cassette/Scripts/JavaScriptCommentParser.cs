@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cassette.BundleProcessing;
 
 namespace Cassette.Scripts
@@ -7,7 +8,7 @@ namespace Cassette.Scripts
     {
         enum State
         {
-            Code, SingleLineComment, MultiLineComment
+            Code, SingleLineComment, MultiLineComment, I18N
         }
 
         public IEnumerable<Comment> Parse(string code)
@@ -37,6 +38,12 @@ namespace Cassette.Scripts
                 switch (state)
                 {
                     case State.Code:
+                        if (i < code.Length - 7 && code.Substring(i, 7) == "i18n.t(")
+                        {
+                            state = State.I18N;
+                            i += 6;
+                            continue;
+                        }
                         if (c != '/') continue;
                         if (i >= code.Length - 2) yield break;
                         if (code[i + 1] == '/')
@@ -113,6 +120,39 @@ namespace Cassette.Scripts
                             Value = code.Substring(commentStart, i - commentStart)
                         };
                         i++; // Skip the '/'
+                        state = State.Code;
+                        break;
+
+                    case State.I18N:
+                        switch (code[i])
+                        {
+                            // Whitespace is allowed
+                            case '\t':
+                            case ' ':
+                                continue;
+
+                            // If we found the open quote, we can begin
+                            case '\'':
+                            case '"':
+                                i++;
+                                break;
+
+                            // If we found any other symbols, this isn't a localized string we can reference
+                            default:
+                                state = State.Code;
+                                continue;
+                        }
+                        commentStart = i;
+                        // Scan until we find the closing quote
+                        while (i < code.Length && code[i] != '\'' && code[i] != '"')
+                        {
+                            i++;
+                        }
+                        yield return new Comment
+                        {
+                            LineNumber = line,
+                            Value = "@localize " +  code.Substring(commentStart, i - commentStart)
+                        };
                         state = State.Code;
                         break;
                 }
