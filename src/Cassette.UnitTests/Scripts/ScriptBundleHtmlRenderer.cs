@@ -13,7 +13,7 @@ namespace Cassette.Scripts
             var urlGenerator = new Mock<IUrlGenerator>();
             var renderer = new ScriptBundleHtmlRenderer(urlGenerator.Object);
             var bundle = new ScriptBundle("~/test");
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                         .Returns("URL");
 
             var html = renderer.Render(bundle);
@@ -29,7 +29,7 @@ namespace Cassette.Scripts
             var bundle = new ScriptBundle("~/test");
             bundle.HtmlAttributes.Add( new { Async = "async", @class = "isDismissed" } );
 
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                         .Returns("URL");
 
             var html = renderer.Render(bundle);
@@ -43,7 +43,7 @@ namespace Cassette.Scripts
             var urlGenerator = new Mock<IUrlGenerator>();
             var renderer = new ScriptBundleHtmlRenderer(urlGenerator.Object);
             var bundle = new ScriptBundle("~/test") {Condition = "CONDITION"};
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                         .Returns("URL");
 
             var html = renderer.Render(bundle);
@@ -61,7 +61,7 @@ namespace Cassette.Scripts
             var urlGenerator = new Mock<IUrlGenerator>();
             var renderer = new ScriptBundleHtmlRenderer(urlGenerator.Object);
             var bundle = new ScriptBundle("~/test") { Condition = "(gt IE 9)| !IE" };
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle))
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false))
                         .Returns("URL");
 
             var html = renderer.Render(bundle);

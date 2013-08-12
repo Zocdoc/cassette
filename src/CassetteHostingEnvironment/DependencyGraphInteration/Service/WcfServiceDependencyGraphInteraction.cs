@@ -139,14 +139,14 @@ namespace CassetteHostingEnvironment.DependencyGraphInteration.Service
             });
         }
 
-        public EnumerableInterationResult GetReferencedBundleUrls<T>(string location) where T : Bundle
+        public EnumerableInterationResult GetReferencedBundleUrls<T>(string location, bool absoluteUrl) where T : Bundle
         {
             return _utility.PerformInteraction(hostService =>
             {
                 var type = typeof(T);
                 var bundleType = TypeToBundleType[type];
                 var bundles = _provider.GetCachedValue();
-                return hostService.GetReferencedBundleUrls(bundles, bundleType, location);
+                return hostService.GetReferencedBundleUrls(bundles, bundleType, location, absoluteUrl);
             });
         }
 

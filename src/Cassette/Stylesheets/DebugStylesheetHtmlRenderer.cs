@@ -28,7 +28,7 @@ namespace Cassette.Stylesheets
 
         IEnumerable<string> GetAssetUrls(StylesheetBundle bundle)
         {
-            return bundle.Assets.Select(urlGenerator.CreateAssetUrl);
+            return bundle.Assets.Select(a => urlGenerator.CreateAssetUrl(a));
         }
 
         Func<string, string> GetCreateLinkFunc(StylesheetBundle bundle)

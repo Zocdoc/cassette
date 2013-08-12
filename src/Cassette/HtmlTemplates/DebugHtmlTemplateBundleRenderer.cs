@@ -26,7 +26,7 @@ namespace Cassette.HtmlTemplates
 
         IEnumerable<string> GetAssetUrls(HtmlTemplateBundle bundle)
         {
-            return bundle.Assets.Select(urlGenerator.CreateAssetUrl);
+            return bundle.Assets.Select(a => urlGenerator.CreateAssetUrl(a));
         }
 
         Func<string, string> GetCreateScriptFunc(HtmlTemplateBundle bundle)

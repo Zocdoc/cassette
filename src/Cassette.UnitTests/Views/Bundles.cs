@@ -188,7 +188,7 @@ namespace Cassette.Views
                 .Setup(c => c.FindBundlesContainingPath("~/test"))
                 .Returns(new[] { bundle });
             urlGenerator
-                .Setup(g => g.CreateBundleUrl(bundle))
+                .Setup(g => g.CreateBundleUrl(bundle, false))
                 .Returns("URL");
 
             var url = Bundles.Url("~/test");
@@ -204,7 +204,7 @@ namespace Cassette.Views
                 .Setup(c => c.FindBundlesContainingPath("~/test"))
                 .Returns(new[] { bundle });
             urlGenerator
-                .Setup(g => g.CreateBundleUrl(bundle))
+                .Setup(g => g.CreateBundleUrl(bundle, false))
                 .Returns("URL");
 
             var url = Bundles.Url<TestableBundle>("~/test");
@@ -242,7 +242,7 @@ namespace Cassette.Views
                 .Setup(b => b.GetBundles(null))
                 .Returns(new[] { new TestableBundle("~") });
             urlGenerator
-                .Setup(g => g.CreateBundleUrl(It.IsAny<Bundle>()))
+                .Setup(g => g.CreateBundleUrl(It.IsAny<Bundle>(), It.IsAny<bool>()))
                 .Returns("/url");
 
             var urls = Bundles.GetReferencedBundleUrls<TestableBundle>();
@@ -258,7 +258,7 @@ namespace Cassette.Views
                 .Setup(b => b.GetBundles("body"))
                 .Returns(new[] { new TestableBundle("~") });
             urlGenerator
-                .Setup(g => g.CreateBundleUrl(It.IsAny<Bundle>()))
+                .Setup(g => g.CreateBundleUrl(It.IsAny<Bundle>(), It.IsAny<bool>()))
                 .Returns("/url");
 
             var urls = Bundles.GetReferencedBundleUrls<TestableBundle>("body");
@@ -279,7 +279,7 @@ namespace Cassette.Views
                 .Returns(new[] { bundle });
             var urls = new Queue<string>(new[] { "/asset1", "/asset2" });
             urlGenerator
-                .Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>()))
+                .Setup(g => g.CreateAssetUrl(It.IsAny<IAsset>(), It.IsAny<bool>()))
                 .Returns(urls.Dequeue);
 
             var returnedUrls = Bundles.GetReferencedBundleUrls<TestableBundle>();
