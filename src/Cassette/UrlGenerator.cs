@@ -14,15 +14,20 @@ namespace Cassette
             this.routePrefix = routePrefix;
         }
 
-        public string CreateBundleUrl(Bundle bundle)
+        public string CreateBundleUrl(Bundle bundle, bool absoluteUrl = false)
         {
             var url = routePrefix + "/" + bundle.Url;
-            return urlModifier.PreCacheModify(url);
+            url = urlModifier.PreCacheModify(url);
+            if (absoluteUrl)
+            {
+                return urlModifier.PostCacheModify(url);
+            }
+            return url;
         }
 
-        public string CreateAssetUrl(IAsset asset)
+        public string CreateAssetUrl(IAsset asset, bool absoluteUrl = false)
         {
-            return urlModifier.PreCacheModify(
+            var url = urlModifier.PreCacheModify(
                 String.Format(
                     "{0}/asset/{1}?{2}",
                     routePrefix,
@@ -30,6 +35,11 @@ namespace Cassette
                     asset.Hash.ToHexString()
                 )
             );
+            if (absoluteUrl)
+            {
+                return urlModifier.PostCacheModify(url);
+            }
+            return url;
         }
 
         public string CreateRawFileUrl(string filename, string hash)

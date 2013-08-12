@@ -11,7 +11,7 @@ namespace Cassette.HtmlTemplates
         {
             var bundle = new HtmlTemplateBundle("~");
             var urlGenerator = new Mock<IUrlGenerator>();
-            urlGenerator.Setup(g => g.CreateBundleUrl(bundle)).Returns("/");
+            urlGenerator.Setup(g => g.CreateBundleUrl(bundle, false)).Returns("/");
 
             var renderer = new RemoteHtmlTemplateBundleRenderer(urlGenerator.Object);
             var html = renderer.Render(bundle);

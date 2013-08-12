@@ -40,7 +40,7 @@ namespace CassetteHostingEnvironment.Hosting
 
         [OperationContract]
         [FaultContract(typeof(GeneralFault))]
-        EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location);
+        EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location, bool absoluteUrl);
 
         [OperationContract]
         [FaultContract(typeof(GeneralFault))]

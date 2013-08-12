@@ -118,7 +118,7 @@ namespace Cassette.DependencyGraphInteration.InMemory
             };
         }
 
-        public EnumerableInterationResult GetReferencedBundleUrls<T>(string location) where T : Bundle
+        public EnumerableInterationResult GetReferencedBundleUrls<T>(string location, bool absoluteUrl) where T : Bundle
         {
             return PerformInteraction(() =>
             {
@@ -130,14 +130,14 @@ namespace Cassette.DependencyGraphInteration.InMemory
                     {
                         Enumerable = bundles
                             .SelectMany(GetAllAssets)
-                            .Select(application.Settings.UrlGenerator.CreateAssetUrl)
+                            .Select(a => application.Settings.UrlGenerator.CreateAssetUrl(a, absoluteUrl))
                             .ToArray()
                     };
                 }
                 return new EnumerableInterationResult
                 {
                     Enumerable = bundles
-                        .Select(application.Settings.UrlGenerator.CreateBundleUrl)
+                        .Select(a => application.Settings.UrlGenerator.CreateBundleUrl(a, absoluteUrl))
                         .ToArray()
                 };
             });

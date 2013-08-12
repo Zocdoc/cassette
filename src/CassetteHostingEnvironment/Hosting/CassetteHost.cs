@@ -227,7 +227,7 @@ namespace CassetteHostingEnvironment.Hosting
             });
         }
 
-        public EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location)
+        public EnumerableInterationResult GetReferencedBundleUrls(IEnumerable<BundleRequest> referencedBundles, BundleType type, string location, bool absoluteUrl)
         {
             return PerformInteraction(() =>
             {
@@ -260,14 +260,14 @@ namespace CassetteHostingEnvironment.Hosting
                     {
                         Enumerable = bundles
                             .SelectMany(GetAllAssets)
-                            .Select(_container.Application.Settings.UrlGenerator.CreateAssetUrl)
+                            .Select(a => _container.Application.Settings.UrlGenerator.CreateAssetUrl(a, absoluteUrl))
                             .ToArray()
                     };
                 }
                 return new EnumerableInterationResult
                 {
                     Enumerable = bundles
-                        .Select(_container.Application.Settings.UrlGenerator.CreateBundleUrl)
+                        .Select(a => _container.Application.Settings.UrlGenerator.CreateBundleUrl(a, absoluteUrl))
                         .ToArray()
                 };
             });

@@ -31,7 +31,7 @@ namespace Cassette
         {
             var bundle = new TestableBundle("~") { Hash = new byte[] {} };
 
-            var url = UrlGenerator.CreateBundleUrl(bundle);
+            var url = UrlGenerator.CreateBundleUrl(bundle, false);
 
             url.ShouldEqual("_cassette/testablebundle/_");
         }
@@ -39,21 +39,21 @@ namespace Cassette
         [Fact]
         public void UrlModifierModifyIsCalled()
         {
-            UrlGenerator.CreateBundleUrl(StubScriptBundle("~/test"));
+            UrlGenerator.CreateBundleUrl(StubScriptBundle("~/test"), false);
             UrlModifier.Verify(m => m.PreCacheModify("_cassette/scriptbundle/test_010203"));
         }
 
         [Fact]
         public void CreateScriptBundleUrlReturnsUrlWithRoutePrefixAndBundleTypeAndPathAndHash()
         {
-            var url = UrlGenerator.CreateBundleUrl(StubScriptBundle("~/test/foo"));
+            var url = UrlGenerator.CreateBundleUrl(StubScriptBundle("~/test/foo"), false);
             url.ShouldEqual("_cassette/scriptbundle/test/foo_010203");
         }
 
         [Fact]
         public void CreateStylesheetBundleUrlReturnsUrlWithRoutePrefixAndBundleTypeAndPathAndHash()
         {
-            var url = UrlGenerator.CreateBundleUrl(StubStylesheetBundle("~/test/foo"));
+            var url = UrlGenerator.CreateBundleUrl(StubStylesheetBundle("~/test/foo"), false);
             url.ShouldEqual("_cassette/stylesheetbundle/test/foo_010203");
         }
 
@@ -85,7 +85,7 @@ namespace Cassette
             asset.SetupGet(a => a.SourceFile.FullPath).Returns("~/test/asset.coffee");
             asset.SetupGet(a => a.Hash).Returns(new byte[0]);
 
-            UrlGenerator.CreateAssetUrl(asset.Object);
+            UrlGenerator.CreateAssetUrl(asset.Object, false);
 
             UrlModifier.Verify(m => m.PreCacheModify(It.IsAny<string>()));
         }
@@ -97,7 +97,7 @@ namespace Cassette
             asset.SetupGet(a => a.SourceFile.FullPath).Returns("~/test/asset.coffee");
             asset.SetupGet(a => a.Hash).Returns(new byte[] { 1, 2, 15, 16 });
 
-            var url = UrlGenerator.CreateAssetUrl(asset.Object);
+            var url = UrlGenerator.CreateAssetUrl(asset.Object, false);
 
             url.ShouldEqual("_cassette/asset/test/asset.coffee?01020f10");
         }
