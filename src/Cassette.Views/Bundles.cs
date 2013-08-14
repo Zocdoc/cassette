@@ -285,6 +285,15 @@ namespace Cassette.Views
         }
 
         /// <summary>
+        /// Returns all bundles in the application.
+        /// </summary>
+        /// <returns>The bundles.</returns>
+        public static IEnumerable<Bundle> GetAllBundles()
+        {
+            return Application.Bundles;
+        } 
+
+        /// <summary>
         /// Gets the bundles that have been referenced during the current request.
         /// </summary>        
         public static IEnumerable<Bundle> GetReferencedBundles()

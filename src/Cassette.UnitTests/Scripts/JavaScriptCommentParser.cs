@@ -58,5 +58,74 @@ namespace Cassette.Scripts
             comments[1].LineNumber.ShouldEqual(2);
             comments[1].Value.ShouldEqual("text2");
         }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineSingleQuotes_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t('Localized.String.Here');").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineDoubleQuotes_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(\"Localized.String.Here\");").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnOneLineWeirdSpacing_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(   'Localized.String.Here' );").Single();
+            comment.LineNumber.ShouldEqual(1);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringOnMultipleLines_ReturnCorrectComment()
+        {
+            var parser = new JavaScriptCommentParser();
+            var comment = parser.Parse("var x = i18n.t(\r'Localized.String.Here'\n);").Single();
+            comment.LineNumber.ShouldEqual(2);
+            comment.Value.ShouldEqual("@localize Localized.String.Here");
+        }
+
+        [Fact]
+        public void WhenParseLocalizedStringComplex_DontReturnInvalidComments()
+        {
+            var js =
+                @"Hogan.Template.prototype.render = function render(context, partials, indent) {
+    
+    context = context || {};
+    
+    context.i18n = function () {
+        return function (s) {
+            
+            if (!i18n
+                || typeof i18n.t !== 'function')
+            {
+                throw new Error('Could not find locale data.');
+            }
+            
+            if (!i18n.t(s))
+            {
+                throw new Error('Could not find locale data for key: ""' + s + '""');
+            }
+            
+            return i18n.t(s);
+        };
+    };
+    
+    return this.ri([context], partials || {}, indent);
+};";
+            var parser = new JavaScriptCommentParser();
+            var comments = parser.Parse(js).ToArray();
+            comments.Length.ShouldEqual(0);
+        }
     }
 }
