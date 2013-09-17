@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CassetteApplication.cs" />
+    <Compile Include="CombinedBundles\CombinedStylesheetBundle.cs" />
     <Compile Include="Compilation\CoffeeScriptCompiler.cs" />
     <Compile Include="IsolatedStorageFileSystem.cs" />
     <Compile Include="MSBuild\CreateBundles.cs" />
