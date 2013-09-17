@@ -44,7 +44,7 @@ namespace Cassette.ScriptAndTemplate
             settings.IsDebuggingEnabled = isDebug;
             new AssignStylesheetRenderer().Process(this, settings);
 
-            CombinedBundleUtility.CompressBundle(this, new MicrosoftStyleSheetMinifier(), settings);
+            CombinedBundleUtility.CompressBundle(this, new MicrosoftStylesheetMinifier(), settings);
         }
 
         internal override string Render()
