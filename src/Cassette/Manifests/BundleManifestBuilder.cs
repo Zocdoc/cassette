@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Ajax.Utilities;
 
 namespace Cassette.Manifests
 {
@@ -29,6 +30,7 @@ namespace Cassette.Manifests
             };
             AddReferencesToBundleManifest(bundle.References);
             AddLocalizedStringsToBundleManifest(bundle.LocalizedStrings);
+            AddAbConfigsToBundleManifest(bundle.AbConfigs);
             AddHtmlAttributesToBundleManifest(bundle.HtmlAttributes);
         }
 
@@ -56,6 +58,14 @@ namespace Cassette.Manifests
             foreach (var localizedString in localizedStrings)
             {
                 bundleManifest.LocalizedStrings.Add(localizedString);
+            }
+        }
+
+        void AddAbConfigsToBundleManifest(IEnumerable<string> abConfigs)
+        {
+            foreach (var abConfig in abConfigs)
+            {
+                bundleManifest.AbConfigs.Add(abConfig);
             }
         }
 

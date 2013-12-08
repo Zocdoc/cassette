@@ -158,5 +158,14 @@ namespace CassetteHostingEnvironment.DependencyGraphInteration.Service
                 return hostService.GetReferencedLocalizedStrings(bundles, location);
             });
         }
+
+        public EnumerableInterationResult GetReferencedAbConfigs(string location)
+        {
+            return _utility.PerformInteraction(hostService =>
+            {
+                var bundles = _provider.GetCachedValue();
+                return hostService.GetReferencedAbConfigs(bundles, location);
+            });
+        }
     }
 }

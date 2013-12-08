@@ -20,6 +20,7 @@ namespace Cassette
             AddAssets(bundle, filesArray, bundleDescriptor.AssetFilenames);
             AddReferences(bundle, bundleDescriptor.References);
             AddLocalizedStrings(bundle, bundleDescriptor.LocalizedStrings);
+            AddAbConfigs(bundle, bundleDescriptor.AbConfigs);
             SetIsSortedIfExplicitFilenames(bundle, bundleDescriptor.AssetFilenames);
             if (bundleDescriptor.IsFromFile)
             {
@@ -108,6 +109,14 @@ namespace Cassette
             foreach (var localizedString in localizedStrings)
             {
                 bundle.AddLocalizedString(localizedString);
+            }
+        }
+
+        void AddAbConfigs(Bundle bundle, IEnumerable<string> abConfigs)
+        {
+            foreach (var abConfig in abConfigs)
+            {
+                bundle.AddAbConfig(abConfig);
             }
         }
 

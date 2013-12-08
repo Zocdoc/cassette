@@ -317,5 +317,24 @@ namespace CassetteHostingEnvironment.Hosting
                 };
             });
         }
+
+        public EnumerableInterationResult GetReferencedAbConfigs(IEnumerable<BundleRequest> referencedBundles, string location)
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = _container.Application.GetReferenceBuilder();
+                foreach (var bundleToReference in referencedBundles)
+                {
+                    referenceBuilder.Reference(bundleToReference.Path, bundleToReference.Location);
+                }
+
+                var bundles = referenceBuilder.GetBundles(location);
+                return new EnumerableInterationResult
+                {
+                    Enumerable =
+                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.AbConfigs).Select(a => a.Name).ToArray()
+                };
+            });
+        }
     }
 }

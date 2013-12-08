@@ -19,6 +19,7 @@ namespace Cassette
         protected readonly List<IAsset> assets = new List<IAsset>();
         readonly HashedSet<string> references = new HashedSet<string>();
         readonly HashedSet<string> localizedStrings = new HashedSet<string>();
+        readonly HashedSet<string> abConfigs = new HashedSet<string>(); 
         readonly HtmlAttributeDictionary htmlAttributes = new HtmlAttributeDictionary();
 
         protected Bundle(string applicationRelativePath)
@@ -92,6 +93,11 @@ namespace Cassette
             get { return localizedStrings; }
         }
 
+        internal IEnumerable<string> AbConfigs
+        {
+            get { return abConfigs; }
+        } 
+
         internal bool IsSorted { get; set; }
 
         /// <summary>
@@ -116,6 +122,11 @@ namespace Cassette
         public void AddLocalizedString(string localizedString)
         {
             localizedStrings.Add(localizedString);
+        }
+
+        public void AddAbConfig(string abConfig)
+        {
+            abConfigs.Add(abConfig);
         }
 
         internal void Process(CassetteSettings settings)

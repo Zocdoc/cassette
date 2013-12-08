@@ -25,6 +25,11 @@ namespace Cassette
         /// Gets the localized strings referenced by this asset.
         /// </summary>
         IEnumerable<AssetLocalizedString> LocalizedStrings { get; }
+
+        /// <summary>
+        /// Gets the AB configs referenced by this asset.
+        /// </summary>
+        IEnumerable<AssetAbConfig> AbConfigs { get; } 
         
         void Accept(IBundleVisitor visitor);
 
@@ -35,6 +40,8 @@ namespace Cassette
         void AddRawFileReference(string relativeFilename);
 
         void AddLocalizedString(string localizedString, int lineNumber);
+
+        void AddAbConfig(string abConfig, int lineNumber);
 
         /// <summary>
         /// Opens a new stream to read the transformed contents of the asset.

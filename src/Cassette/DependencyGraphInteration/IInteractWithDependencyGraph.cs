@@ -17,5 +17,6 @@ namespace Cassette.DependencyGraphInteration
         EnumerableInterationResult GetReferencedBundleUrls<T>(string location, bool absoluteUrl)
             where T : Bundle;
         EnumerableInterationResult GetReferencedLocalizedStrings(string location);
+        EnumerableInterationResult GetReferencedAbConfigs(string location);
     }
 }

@@ -56,6 +56,11 @@ namespace Cassette.ScriptAndTemplate
                 AddLocalizedString(localizedString);
             }
 
+            foreach (var abConfig in ScriptBundle.AbConfigs)
+            {
+                AddAbConfig(abConfig);
+            }
+
             CombinedBundleUtility.RemoveAssetReferences(new[] { ScriptBundle.Path, HtmlTemplateBundle.Path }, assets, settings);
 
             settings.IsDebuggingEnabled = isDebug;

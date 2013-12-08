@@ -35,13 +35,19 @@ namespace Cassette.BundleProcessing
             var references = referenceParser.Parse(code, asset);
             foreach (var reference in references)
             {
-                if (reference.Type == ReferenceParser.ReferenceType.Asset)
+                switch (reference.Type)
                 {
-                    asset.AddReference(reference.Path, reference.LineNumber);
-                }
-                else
-                {
-                    asset.AddLocalizedString(reference.Path, reference.LineNumber);
+                    case ReferenceParser.ReferenceType.Asset:
+                        asset.AddReference(reference.Path, reference.LineNumber);
+                        break;
+                    case ReferenceParser.ReferenceType.LocalizedString:
+                        asset.AddLocalizedString(reference.Path, reference.LineNumber);
+                        break;
+                    case ReferenceParser.ReferenceType.AbConfig:
+                        asset.AddAbConfig(reference.Path, reference.LineNumber);
+                        break;
+                    default:
+                        throw new InvalidDataException("Invalid reference type");
                 }
             }
         }

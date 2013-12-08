@@ -8,7 +8,7 @@ namespace Cassette.Scripts
     {
         enum State
         {
-            Code, SingleLineComment, MultiLineComment, I18N
+            Code, SingleLineComment, MultiLineComment, I18N, AbConfig
         }
 
         public IEnumerable<Comment> Parse(string code)
@@ -42,6 +42,18 @@ namespace Cassette.Scripts
                         {
                             state = State.I18N;
                             i += 6;
+                            continue;
+                        }
+                        if (i < code.Length - 8 && code.Substring(i, 8) == "AB.isOn(")
+                        {
+                            state = State.AbConfig;
+                            i += 7;
+                            continue;
+                        }
+                        if (i < code.Length - 14 && code.Substring(i, 14) == "AB.getVariant(")
+                        {
+                            state = State.AbConfig;
+                            i += 13;
                             continue;
                         }
                         if (c != '/') continue;
@@ -152,6 +164,39 @@ namespace Cassette.Scripts
                         {
                             LineNumber = line,
                             Value = "@localize " +  code.Substring(commentStart, i - commentStart)
+                        };
+                        state = State.Code;
+                        break;
+
+                    case State.AbConfig:
+                        switch (code[i])
+                        {
+                            // Whitespace is allowed
+                            case '\t':
+                            case ' ':
+                                continue;
+
+                            // If we found the open quote, we can begin
+                            case '\'':
+                            case '"':
+                                i++;
+                                break;
+
+                            // If we found any other symbols, this isn't an AB config we can reference
+                            default:
+                                state = State.Code;
+                                continue;
+                        }
+                        commentStart = i;
+                        // Scan until we find the closing quote
+                        while (i < code.Length && code[i] != '\'' && code[i] != '"')
+                        {
+                            i++;
+                        }
+                        yield return new Comment
+                        {
+                            LineNumber = line,
+                            Value = "@abconfig " +  code.Substring(commentStart, i - commentStart)
                         };
                         state = State.Code;
                         break;

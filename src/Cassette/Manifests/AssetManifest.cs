@@ -11,11 +11,13 @@ namespace Cassette.Manifests
         {
             References = new List<AssetReferenceManifest>();
             LocalizedStrings = new List<AssetLocalizedStringManifest>();
+            AbConfigs = new List<AssetAbConfigManifest>();
         }
 
         public string Path { get; set; }
         public IList<AssetReferenceManifest> References { get; private set; }
         public IList<AssetLocalizedStringManifest> LocalizedStrings { get; private set; }
+        public IList<AssetAbConfigManifest> AbConfigs { get; private set; } 
         
         public override bool Equals(object obj)
         {

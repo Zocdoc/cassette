@@ -183,6 +183,20 @@ namespace Cassette.DependencyGraphInteration.InMemory
             });
         }
 
+        public EnumerableInterationResult GetReferencedAbConfigs(string location)
+        {
+            return PerformInteraction(() =>
+            {
+                var referenceBuilder = application.GetReferenceBuilder();
+                var bundles = referenceBuilder.GetBundles(location);
+                return new EnumerableInterationResult
+                {
+                    Enumerable =
+                        bundles.SelectMany(b => b.Assets).SelectMany(a => a.AbConfigs).Select(l => l.Name).ToArray()
+                };
+            });
+        }
+
         private T PerformInteraction<T>(Func<T> action)
             where T : IInterationResult, new()
         {

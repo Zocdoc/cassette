@@ -350,6 +350,21 @@ namespace Cassette.Views
                 throw result.Exception;
             }
             return result.Enumerable;
+        }
+
+        public static IEnumerable<string> GetReferencedAbConfigs()
+        {
+            return GetReferencedAbConfigs(null);
+        }
+
+        public static IEnumerable<string> GetReferencedAbConfigs(string pageLocation)
+        {
+            var result = ExternalGraphInteraction.GetReferencedAbConfigs(pageLocation);
+            if (result.Exception != null)
+            {
+                throw result.Exception;
+            }
+            return result.Enumerable;
         } 
 
         static IHtmlString Render<T>(string location) where T : Bundle

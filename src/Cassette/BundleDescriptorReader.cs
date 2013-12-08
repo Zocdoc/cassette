@@ -20,7 +20,8 @@ namespace Cassette
                 { "assets", ParseAsset },
                 { "references", ParseReference },
                 { "external", ParseExternal },
-                { "localizedstrings", ParseLocalizedString }
+                { "localizedstrings", ParseLocalizedString },
+                { "abconfigs", ParseAbConfig }
             };
         }
             
@@ -28,6 +29,7 @@ namespace Cassette
         readonly List<string> assetFilenames = new List<string>();
         readonly HashedSet<string> references = new HashedSet<string>(); 
         readonly HashedSet<string> localizedStrings = new HashedSet<string>();
+        readonly HashedSet<string> abConfigs = new HashedSet<string>(); 
         readonly Dictionary<string, Action<string>> sectionLineParsers;
         string currentSection = "assets";
         string externalUrl;
@@ -53,6 +55,7 @@ namespace Cassette
             descriptor.AssetFilenames.AddRange(assetFilenames);
             descriptor.References.AddRange(references);
             descriptor.LocalizedStrings.AddRange(localizedStrings);
+            descriptor.AbConfigs.AddRange(abConfigs);
             return descriptor;
         }
 
@@ -109,6 +112,11 @@ namespace Cassette
         void ParseLocalizedString(string line)
         {
             localizedStrings.Add(line);
+        }
+
+        void ParseAbConfig(string line)
+        {
+            abConfigs.Add(line);
         }
 
         void ParseExternal(string line)

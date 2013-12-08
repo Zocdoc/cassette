@@ -15,6 +15,7 @@ namespace Cassette
             SourceFile = new StubFile { FullPath = fullPath };
             References = new List<AssetReference>();
             LocalizedStrings = new List<AssetLocalizedString>();
+            AbConfigs = new List<AssetAbConfig>();
         }
 
         public Func<Stream> CreateStream { get; set; }
@@ -27,6 +28,8 @@ namespace Cassette
 
         public List<AssetLocalizedString> LocalizedStrings { get; set; }
 
+        public List<AssetAbConfig> AbConfigs { get; set; }
+        
         IEnumerable<AssetReference> IAsset.References
         {
             get { return References; }
@@ -36,6 +39,11 @@ namespace Cassette
         {
             get { return LocalizedStrings; }
         }
+
+        IEnumerable<AssetAbConfig> IAsset.AbConfigs
+        {
+            get { return AbConfigs; }
+        } 
 
         public void Accept(IBundleVisitor visitor)
         {
@@ -55,6 +63,10 @@ namespace Cassette
         }
 
         public void AddLocalizedString(string localizedString, int lineNumber)
+        {
+        }
+
+        public void AddAbConfig(string abConfig, int lineNumber)
         {
         }
 

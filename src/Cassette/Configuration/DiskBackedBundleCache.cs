@@ -160,7 +160,8 @@ namespace Cassette.Configuration
                 var file = fileHelper.GetFileSystemFile(directory, systemAbsoluteFilename, CacheDirectory);
                 var fileAsset = new FileAsset(file, bundle);
                 if (!GetAssetReferencesFromDisk(fileHelper, fileAsset, systemAbsoluteFilename) ||
-                    !GetAssetLocalizedStringsFromDisk(fileHelper, fileAsset, systemAbsoluteFilename))
+                    !GetAssetLocalizedStringsFromDisk(fileHelper, fileAsset, systemAbsoluteFilename) ||
+                    !GetAssetAbConfigsFromDisk(fileHelper, fileAsset, systemAbsoluteFilename))
                 {
                     continue;
                 }
@@ -215,6 +216,16 @@ namespace Cassette.Configuration
                 });
             }
             fileHelper.Write(systemAbsoluteFilename + "localizedstrings", JsonConvert.SerializeObject(localizedStringHolderList));
+            var abConfigHolderList = new List<AbConfigHolder>();
+            foreach (AssetAbConfig assetAbConfig in asset.AbConfigs)
+            {
+                abConfigHolderList.Add(new AbConfigHolder
+                {
+                    AbConfig = assetAbConfig.Name,
+                    LineNumber = assetAbConfig.SourceLineNumber
+                });
+            }
+            fileHelper.Write(systemAbsoluteFilename + "abconfigs", JsonConvert.SerializeObject(abConfigHolderList));
         }
 
         public bool GetAssetReferencesFromDisk(IFileHelper fileHelper, FileAsset fileAsset,
@@ -252,6 +263,22 @@ namespace Cassette.Configuration
             foreach (LocalizedStringHolder localizedStringHolder in localizedStringHolderList)
             {
                 fileAsset.AddLocalizedString(localizedStringHolder.LocalizedString, localizedStringHolder.LineNumber);
+            }
+            return true;
+        }
+
+        public bool GetAssetAbConfigsFromDisk(IFileHelper fileHelper, FileAsset fileAsset,
+                                               string systemAbsoluteFilename)
+        {
+            if (!fileHelper.Exists(systemAbsoluteFilename + "abconfigs"))
+            {
+                return false;
+            }
+            var abConfigHolderList = JsonConvert.DeserializeObject<List<AbConfigHolder>>
+                (fileHelper.ReadAllText(systemAbsoluteFilename + "abconfigs"));
+            foreach (AbConfigHolder abConfigHolder in abConfigHolderList)
+            {
+                fileAsset.AddAbConfig(abConfigHolder.AbConfig, abConfigHolder.LineNumber);
             }
             return true;
         }
@@ -309,6 +336,16 @@ namespace Cassette.Configuration
         {
             public int LineNumber;
             public string LocalizedString;
+        }
+
+        #endregion
+
+        #region Nested type: AbConfigHolder
+
+        class AbConfigHolder
+        {
+            public int LineNumber;
+            public string AbConfig;
         }
 
         #endregion
