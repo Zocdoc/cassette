@@ -49,6 +49,11 @@ namespace Cassette.Web.Jasmine
             get { yield break; }
         }
 
+        public IEnumerable<AssetAbConfig> AbConfigs
+        {
+            get { yield break; }
+        } 
+
         public void Accept(IBundleVisitor visitor)
         {
             visitor.Visit(this);
@@ -68,6 +73,10 @@ namespace Cassette.Web.Jasmine
         }
 
         public void AddLocalizedString(string localizedString, int lineNumber)
+        {
+        }
+
+        public void AddAbConfig(string abConfig, int lineNumber)
         {
         }
 

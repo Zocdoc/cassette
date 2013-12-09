@@ -33,6 +33,7 @@ namespace Cassette.Manifests
                 PageLocationAttribute(),
                 manifest.References.Select(SerializeReference),
                 manifest.LocalizedStrings.Select(SerializeLocalizedString),
+                manifest.AbConfigs.Select(SerializeAbConfig),
                 HtmlAttributeElements(),
                 ContentElement(),
                 HtmlElement()
@@ -118,6 +119,14 @@ namespace Cassette.Manifests
         {
             return new XElement(
                 "LocalizedString",
+                new XAttribute("Name", name)
+            );
+        }
+
+        XElement SerializeAbConfig(string name)
+        {
+            return new XElement(
+                "AbConfig",
                 new XAttribute("Name", name)
             );
         }

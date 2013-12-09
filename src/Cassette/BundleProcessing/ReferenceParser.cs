@@ -8,7 +8,7 @@ namespace Cassette.BundleProcessing
     {
         enum State { None, InSingleQuote, InDoubleQuote, InRawPath }
 
-        public enum ReferenceType { Asset, LocalizedString }
+        public enum ReferenceType { Asset, LocalizedString, AbConfig }
 
         public class ParsedReference
         {
@@ -50,6 +50,11 @@ namespace Cassette.BundleProcessing
             {
                 i = 9;
                 type = ReferenceType.LocalizedString;
+            }
+            else if (comment.StartsWith("@abconfig"))
+            {
+                i = 9;
+                type = ReferenceType.AbConfig;
             }
             else
             {

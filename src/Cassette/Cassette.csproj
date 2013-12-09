@@ -89,7 +89,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssetAbConfig.cs" />
     <Compile Include="AssetLocalizedString.cs" />
+    <Compile Include="BundleProcessing\AbConfigParser.cs" />
     <Compile Include="BundleProcessing\AssignHash.cs" />
     <Compile Include="BundleProcessing\LocalizationParser.cs" />
     <Compile Include="BundleReferenceCollector.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="HtmlTemplates\RegisterTemplateWithHandlebars.cs" />
     <Compile Include="ICachePerRequestProvider.cs" />
     <Compile Include="IExternalBundle.cs" />
+    <Compile Include="Manifests\AssetAbConfigManifest.cs" />
     <Compile Include="Manifests\AssetLocalizedStringManifest.cs" />
     <Compile Include="Manifests\AssetManifestBuilder.cs" />
     <Compile Include="Manifests\AssetReferenceManifest.cs" />

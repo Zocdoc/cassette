@@ -35,6 +35,7 @@ namespace Cassette.Manifests
             AddAssets(manifest);
             AddReferences(manifest);
             AddLocalizedStrings(manifest);
+            AddAbConfigs(manifest);
             AddHtmlAttributes(manifest);
             InitializeBundleManifest(manifest, element);
             return manifest;
@@ -118,6 +119,15 @@ namespace Cassette.Manifests
             }
         }
 
+        void AddAbConfigs(BundleManifest manifest)
+        {
+            var abConfigs = GetAbConfigs();
+            foreach (var abConfig in abConfigs)
+            {
+                manifest.AbConfigs.Add(abConfig);
+            }
+        }
+
         void AddHtmlAttributes(BundleManifest manifest)
         {
             var attributeElements = element.Elements("HtmlAttribute");
@@ -152,6 +162,12 @@ namespace Cassette.Manifests
         {
             var localizedStringElements = element.Elements("LocalizedString");
             return localizedStringElements.Select(GetLocalizedStringNameAttribute);
+        }
+
+        IEnumerable<string> GetAbConfigs()
+        {
+            var abConfigElements = element.Elements("AbConfig");
+            return abConfigElements.Select(GetAbConfigNameAttribute);
         } 
 
         string GetReferencePathAttribute(XElement referenceElement)
@@ -167,6 +183,14 @@ namespace Cassette.Manifests
             return localizedStringElement.AttributeValueOrThrow(
                 "Name",
                 () => new InvalidCassetteManifestException("LocalizedString manifest element missing \"Name\" attribute.")
+            );
+        }
+
+        string GetAbConfigNameAttribute(XElement abConfigElement)
+        {
+            return abConfigElement.AttributeValueOrThrow(
+                "Name",
+                () => new InvalidCassetteManifestException("AbConfig manifest element missing \"Name\" attribute.")
             );
         }
     }

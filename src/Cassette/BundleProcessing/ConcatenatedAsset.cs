@@ -48,6 +48,11 @@ namespace Cassette.BundleProcessing
             get { return children.SelectMany(c => c.LocalizedStrings); }
         }
 
+        public override IEnumerable<AssetAbConfig> AbConfigs
+        {
+            get { return children.SelectMany(c => c.AbConfigs); }
+        }
+
         public override void AddReference(string path, int lineNumber)
         {
             throw new NotSupportedException();
@@ -59,6 +64,11 @@ namespace Cassette.BundleProcessing
         }
 
         public override void AddLocalizedString(string localizedString, int lineNumber)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void AddAbConfig(string abConfig, int lineNumber)
         {
             throw new NotSupportedException();
         }

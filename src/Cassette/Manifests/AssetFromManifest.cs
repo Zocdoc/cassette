@@ -45,6 +45,16 @@ namespace Cassette.Manifests
             }
         }
 
+        public IEnumerable<AssetAbConfig> AbConfigs
+        {
+            get
+            {
+                return assetManifest.AbConfigs.Select(
+                    r => new AssetAbConfig(r.AbConfig, this, r.SourceLineNumber)
+                );
+            }
+        }
+
         public void Accept(IBundleVisitor visitor)
         {
             visitor.Visit(this);
@@ -66,6 +76,11 @@ namespace Cassette.Manifests
         }
 
         public void AddLocalizedString(string localizedString, int lineNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAbConfig(string abConfig, int lineNumber)
         {
             throw new NotImplementedException();
         }

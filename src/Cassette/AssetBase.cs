@@ -64,11 +64,15 @@ namespace Cassette
 
         public abstract IEnumerable<AssetLocalizedString> LocalizedStrings { get; }
 
+        public abstract IEnumerable<AssetAbConfig> AbConfigs { get; } 
+
         public abstract void AddReference(string path, int lineNumber);
 
         public abstract void AddRawFileReference(string relativeFilename);
 
         public abstract void AddLocalizedString(string localizedString, int lineNumber);
+
+        public abstract void AddAbConfig(string abConfig, int lineNumber);
     }
 }
 

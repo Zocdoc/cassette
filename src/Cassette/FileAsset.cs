@@ -23,6 +23,7 @@ namespace Cassette
         readonly Lazy<byte[]> hash;
         readonly List<AssetReference> references = new List<AssetReference>();
         readonly List<AssetLocalizedString> localizedStrings = new List<AssetLocalizedString>(); 
+        readonly List<AssetAbConfig> abConfigs = new List<AssetAbConfig>(); 
 
         public override IFile SourceFile
         {
@@ -42,6 +43,11 @@ namespace Cassette
         public override IEnumerable<AssetLocalizedString> LocalizedStrings
         {
             get { return localizedStrings; }
+        }
+
+        public override IEnumerable<AssetAbConfig> AbConfigs
+        {
+            get { return abConfigs; }
         }
 
         public override void AddReference(string assetRelativePath, int lineNumber)
@@ -115,6 +121,11 @@ namespace Cassette
         public override void AddLocalizedString(string localizedString, int lineNumber)
         {
             localizedStrings.Add(new AssetLocalizedString(localizedString, this, lineNumber));
+        }
+
+        public override void AddAbConfig(string abConfig, int lineNumber)
+        {
+            abConfigs.Add(new AssetAbConfig(abConfig, this, lineNumber));
         }
 
         byte[] ComputeHash()

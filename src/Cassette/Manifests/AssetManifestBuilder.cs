@@ -19,6 +19,10 @@ namespace Cassette.Manifests
             {
                 assetManifest.LocalizedStrings.Add(localizedString);
             }
+            foreach (var abConfig in GetAbConfigs(asset))
+            {
+                assetManifest.AbConfigs.Add(abConfig);
+            }
             return assetManifest;
         }
 
@@ -43,5 +47,15 @@ namespace Cassette.Manifests
                        SourceLineNumber = l.SourceLineNumber
                    };
         }
+
+        IEnumerable<AssetAbConfigManifest> GetAbConfigs(IAsset asset)
+        {
+            return from a in asset.AbConfigs
+                   select new AssetAbConfigManifest
+                   {
+                       AbConfig = a.Name,
+                       SourceLineNumber = a.SourceLineNumber
+                   };
+        } 
     }
 }

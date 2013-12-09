@@ -75,6 +75,14 @@ namespace Cassette.Manifests
             }
         }
 
+        public IEnumerable<AssetAbConfig> AbConfigs
+        {
+            get
+            {
+                return originalAssets.SelectMany(a => a.AbConfigs);
+            }
+        } 
+
         public void AddAssetTransformer(IAssetTransformer transformer)
         {
             throw new NotImplementedException();
@@ -91,6 +99,11 @@ namespace Cassette.Manifests
         }
 
         public void AddLocalizedString(string localizedString, int lineNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAbConfig(string abConfig, int lineNumber)
         {
             throw new NotImplementedException();
         }

@@ -45,5 +45,9 @@ namespace CassetteHostingEnvironment.Hosting
         [OperationContract]
         [FaultContract(typeof(GeneralFault))]
         EnumerableInterationResult GetReferencedLocalizedStrings(IEnumerable<BundleRequest> referencedBundles, string location);
+
+        [OperationContract]
+        [FaultContract(typeof(GeneralFault))]
+        EnumerableInterationResult GetReferencedAbConfigs(IEnumerable<BundleRequest> referencedBundles, string location);
     }
 }
